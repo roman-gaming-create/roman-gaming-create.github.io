@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📸 Галерея проекта — VR Городок</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            color: #2980b9;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+        }
+        .gallery img:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            object-fit: contain;
+            padding: 20px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 42px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            z-index: 1001;
+        }
+        .modal-close:hover {
+            color: #aaa;
+        }
+        .caption {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            background: rgba(0,0,0,0.6);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📸 Галерея проекта «VR Городок»</h1>
+
+    <div class="gallery" id="image-gallery">
+        <img src="screenshots/city_overview.png" alt="Общий вид Городка">
+        <img src="screenshots/oranges_zone.png" alt="Зона апельсинов">
+        <img src="screenshots/sparrows_yard.png" alt="Воробьи во дворе">
+        <img src="screenshots/card_and_coins.png" alt="Сбор монет пластиковой картой">
+        <img src="screenshots/coins.png" alt="Монеты в лесу">
+        <img src="screenshots/island_chest.png" alt="Море с видом на остров сокровищ">
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="image-modal" class="modal" onclick="closeModal()">
+        <span class="modal-close" onclick="event.stopPropagation(); closeModal()">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <div class="caption" id="modal-caption"></div>
+    </div>
+
+    <script>
+        const gallery = document.getElementById('image-gallery');
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-image');
+        const modalCaption = document.getElementById('modal-caption');
+
+        gallery.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                modal.style.display = "block";
+                modalImg.src = img.src;
+                modalCaption.textContent = img.alt;
+            });
+        });
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeModal();
+        });
+    </script>
+</body>
+</html>
