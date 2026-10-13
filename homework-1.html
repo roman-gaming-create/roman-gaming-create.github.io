@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашнее задание №1 — Тестирование нейросетей</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf9);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .main-title {
+            text-align: center;
+            color: #1a5276;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .main-subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d6eaf8;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2980b9;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        h2 {
+            color: #1a5276;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        h3 {
+            color: #2874a6;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .goal-block {
+            background: #f8fbff;
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #d6eaf8;
+        }
+
+        .goal-block p {
+            margin-bottom: 10px;
+        }
+
+        .goal-block strong {
+            color: #1a5276;
+        }
+
+        .tasks-list {
+            padding-left: 22px;
+            margin-top: 10px;
+        }
+
+        .tasks-list li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .tasks-list li::marker {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d6eaf8, transparent);
+            margin: 30px 0;
+        }
+
+        .results-links-block {
+            background: #f8fbff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid #d6eaf8;
+            text-align: center;
+        }
+
+        .results-links-block h3 {
+            color: #1a5276;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .results-links-block p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .ai-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .ai-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+        }
+
+        .ai-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ai-link .emoji {
+            font-size: 20px;
+        }
+
+        .ai-link.chatgpt {
+            background: linear-gradient(135deg, #10a37f 0%, #0d8a6a 100%);
+        }
+        .ai-link.chatgpt:hover {
+            border-color: #10a37f;
+        }
+
+        .ai-link.gemini {
+            background: linear-gradient(135deg, #4285f4 0%, #3367c4 100%);
+        }
+        .ai-link.gemini:hover {
+            border-color: #4285f4;
+        }
+
+        .ai-link.deepseek {
+            background: linear-gradient(135deg, #5b6ef5 0%, #4a5cd4 100%);
+        }
+        .ai-link.deepseek:hover {
+            border-color: #5b6ef5;
+        }
+
+        .ai-link.gigachat {
+            background: linear-gradient(135deg, #7b5ea7 0%, #6a4f93 100%);
+        }
+        .ai-link.gigachat:hover {
+            border-color: #7b5ea7;
+        }
+
+        .ai-link.grok {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+        }
+        .ai-link.grok:hover {
+            border-color: #1a1a1a;
+        }
+
+        .ai-link.lmarena {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+        }
+        .ai-link.lmarena:hover {
+            border-color: #e67e22;
+        }
+
+        .conclusion-block {
+            background: #f8fbff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid #d6eaf8;
+        }
+
+        .conclusion-block p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .prompt-label {
+            font-weight: 600;
+            color: #1a5276;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .prompt-block {
+            background: #e3f2fd;
+            padding: 20px 25px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            color: #1a5276;
+        }
+
+        .insight-block {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            padding: 18px 22px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        .insight-block strong {
+            color: #b7791f;
+        }
+
+        .observations-list {
+            padding-left: 22px;
+            margin: 15px 0;
+        }
+
+        .observations-list li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .observations-list li::marker {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .conclusion-final {
+            background: #e8f6f3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #1abc9c;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #1a5276;
+        }
+
+        .gallery-block {
+            background: #f8fbff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid #d6eaf8;
+        }
+
+        .gallery-block h2 {
+            margin-top: 0;
+        }
+
+        .gallery-block > p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            aspect-ratio: 16 / 10;
+            background: #e3f2fd;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            display: block;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item::after {
+            content: "🔍";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .gallery-item:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            border: none;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            border: none;
+            user-select: none;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .lightbox-prev {
+            left: 30px;
+        }
+
+        .lightbox-next {
+            right: 30px;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-clear {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            min-width: 700px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid #2980b9;
+        }
+
+        td {
+            padding: 0;
+            border: 2px solid #2c3e50;
+            vertical-align: top;
+        }
+
+        .ai-name {
+            padding: 12px;
+            background: #f8fbff;
+            font-weight: 600;
+            color: #1a5276;
+            font-size: 14px;
+            min-width: 130px;
+            border: 2px solid #2c3e50;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 70px;
+            padding: 10px;
+            border: none;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 13px;
+            line-height: 1.5;
+            background: transparent;
+            color: #2c3e50;
+            transition: background 0.2s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            background: #e3f2fd;
+        }
+
+        textarea::placeholder {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .status.show {
+            opacity: 1;
+        }
+
+        .status.saved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.cleared {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .bottom-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .main-title {
+                font-size: 22px;
+            }
+
+            .main-subtitle {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            th {
+                padding: 10px 8px;
+                font-size: 11px;
+            }
+
+            .ai-name {
+                padding: 8px;
+                font-size: 12px;
+                min-width: 100px;
+            }
+
+            textarea {
+                min-height: 60px;
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .prompt-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+
+            .ai-links-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+
+            .ai-link {
+                padding: 12px 15px;
+                font-size: 13px;
+            }
+
+            .ai-link .emoji {
+                font-size: 18px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 30px;
+            }
+
+            .lightbox-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 35px;
+            }
+
+            .lightbox-prev {
+                left: 15px;
+            }
+
+            .lightbox-next {
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">📚 Домашнее задание №1</h1>
+        <p class="main-subtitle">Курс «Нейросети и ИИ»</p>
+
+        <h2>🎯 Цели и задачи на курсе</h2>
+        <div class="goal-block">
+            <p><strong>Общая цель курса:</strong> Систематизировать уже накопленный опыт работы с нейросетями и получить новые профессиональные навыки, которые смогу в будущем применить в своих проектах.</p>
+            <p><strong>Конкретные задачи:</strong></p>
+            <ol class="tasks-list">
+                <li>Освоить профессиональный промпт-инжиниринг — осмыслить свой навык написания промптов и узнать, как это делают профессионалы.</li>
+                <li>Научиться создавать качественную графику с помощью нейросетей.</li>
+                <li>Изучить создание виртуальных ИИ-ассистентов.</li>
+                <li>Узнать о скрытых возможностях GPT и научиться применять их на практике.</li>
+            </ol>
+        </div>
+
+        <div class="divider"></div>
+
+        <h1>🤖 Тестирование нейросетей</h1>
+
+        <div class="table-wrapper">
+            <table id="aiTable">
+                <thead>
+                    <tr>
+                        <th>Нейросеть</th>
+                        <th>Скорость ответа</th>
+                        <th>Качество кода/структура</th>
+                        <th>Понимание контекста</th>
+                        <th>Понимание русского языка и орфография</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ai-name">ChatGPT</td>
+                        <td><textarea data-key="chatgpt_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="chatgpt_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="chatgpt_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="chatgpt_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="ai-name">Google Gemini</td>
+                        <td><textarea data-key="gemini_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="gemini_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="gemini_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="gemini_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="ai-name">Deepseek</td>
+                        <td><textarea data-key="deepseek_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="deepseek_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="deepseek_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="deepseek_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="ai-name">GigaChat</td>
+                        <td><textarea data-key="gigachat_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="gigachat_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="gigachat_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="gigachat_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="ai-name">Grok</td>
+                        <td><textarea data-key="grok_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="grok_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="grok_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="grok_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="ai-name">LMarena (Chatbot Arena)</td>
+                        <td><textarea data-key="lmarena_speed" placeholder="Оцените скорость..."></textarea></td>
+                        <td><textarea data-key="lmarena_quality" placeholder="Оцените качество..."></textarea></td>
+                        <td><textarea data-key="lmarena_context" placeholder="Оцените понимание..."></textarea></td>
+                        <td><textarea data-key="lmarena_russian" placeholder="Оцените язык..."></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bottom-button">
+            <button class="btn-clear" onclick="clearTable()">️ 🗑️ Очистить таблицу</button>
+        </div>
+
+        <div class="results-links-block">
+            <h3>📎 Подробные результаты тестирования</h3>
+            <p>Перейдите по ссылкам, чтобы ознакомиться с полными ответами каждой нейросети на тестовый промпт</p>
+            
+            <div class="ai-links-grid">
+                <a href="chatgpt.html" class="ai-link chatgpt">
+                    <span class="emoji">💬</span>
+                    <span>ChatGPT</span>
+                </a>
+                <a href="gemini.html" class="ai-link gemini">
+                    <span class="emoji">✨</span>
+                    <span>Google Gemini</span>
+                </a>
+                <a href="deepseek.html" class="ai-link deepseek">
+                    <span class="emoji">🔍</span>
+                    <span>Deepseek</span>
+                </a>
+                <a href="gigachat.html" class="ai-link gigachat">
+                    <span class="emoji">🤖</span>
+                    <span>GigaChat</span>
+                </a>
+                <a href="grok.html" class="ai-link grok">
+                    <span class="emoji">🚀</span>
+                    <span>Grok (LMarena)</span>
+                </a>
+                <a href="lmarena.html" class="ai-link lmarena">
+                    <span class="emoji">🏟️</span>
+                    <span>Claude (LMarena)</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="conclusion-block">
+            <h2> Вывод по тестированию</h2>
+            <p>В процессе тестирования нейросетей я решил задать им одну и ту же задачу, чтобы сравнить их в одинаковых условиях.</p>
+            
+            <p class="prompt-label">📝 Промпт, заданный нейросетям:</p>
+            <div class="prompt-block">Я разрабатываю мини-игру в Unity для ОС Windows. В игре есть персонаж, он представлен в виде кубика.
+Для него создан уровень с препятствиями. Напиши простой и хорошо прокомментированный
+C# скрипт, который позволяет кубику двигаться. Для движения используем клавиши WASD, для прыжков Space.
+Также предложи идею, как усложнить эту механику, чтобы расширить возможности нашего персонажа.
+Подготовь ответ структурно, разделив на главы.</div>
+
+            <p>Все нейросети показали хорошие результаты. Основная цель тестирования: изучение скорости ответа нейросетей, структура ответа и его визуальное восприятие, понимание контекста, а также понимание русского языка и орфография.</p>
+
+            <h3>🔍 Ключевые наблюдения</h3>
+            <ul class="observations-list">
+                <li><strong>GigaChat, ChatGPT и Deepseek</strong> показали лучшую скорость ответа.</li>
+                <li><strong>Понимание русского языка и орфография</strong> в целом у всех нейросетей хорошая. В первом ответе <strong>Deepseek</strong> наблюдалась адаптация к русскому языку и путаница в некоторых фразах, но далее в ходе тестирования он сам исправил свои ошибки и выдал приемлемый результат.</li>
+                <li>При оценке <strong>качества кода</strong> оценивалась задача: создать простой и понятный код. На мой взгляд, код <em>излишен у всех нейросетей</em>, его можно ещё упростить.</li>
+                <li>Лучшие ответы по <strong>структуре и визуалу</strong> у <strong>ChatGPT, GigaChat и Claude (LMarena)</strong>.</li>
+            </ul>
+
+            <div class="insight-block">
+                💡 <strong>Практический инсайт:</strong> только <strong>GigaChat</strong> сразу же указал на то, что код работает для версий Unity 2021 года, что является плюсом. Поэтому в промпте рекомендуется <strong>сразу указывать версию 3D-движка и метод использования</strong>.
+            </div>
+
+            <div class="conclusion-final">
+                ✅ Оценки результатов тестирования представлены в таблице выше.
+            </div>
+        </div>
+
+        <div class="gallery-block">
+            <h2>🖼️ Галерея</h2>
+            <p>Примеры работы нейросетей и результаты тестирования</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox('Screenshots/image-1.jpg')">
+                    <img src="Screenshots/image-1.jpg" alt="Изображение 1" loading="lazy">
+                </div>
+                <div class="gallery-item" onclick="openLightbox('Screenshots/image-2.jpg')">
+                    <img src="Screenshots/image-2.jpg" alt="Изображение 2" loading="lazy">
+                </div>
+                <div class="gallery-item" onclick="openLightbox('Screenshots/image-3.jpg')">
+                    <img src="Screenshots/image-3.jpg" alt="Изображение 3" loading="lazy">
+                </div>
+                <div class="gallery-item" onclick="openLightbox('Screenshots/image-4.jpg')">
+                    <img src="Screenshots/image-4.jpg" alt="Изображение 4" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+            <button class="lightbox-close" onclick="closeLightbox(event)">×</button>
+            <button class="lightbox-nav lightbox-prev" onclick="changeImage(-1, event)">‹</button>
+            <button class="lightbox-nav lightbox-next" onclick="changeImage(1, event)">›</button>
+            <img id="lightbox-img" src="" alt="Просмотр изображения">
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+        </div>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        const galleryImages = [
+            'Screenshots/image-1.jpg',
+            'Screenshots/image-2.jpg',
+            'Screenshots/image-3.jpg',
+            'Screenshots/image-4.jpg'
+        ];
+        let currentImageIndex = 0;
+
+        function loadData() {
+            const textareas = document.querySelectorAll('textarea[data-key]');
+            textareas.forEach(textarea => {
+                const key = textarea.getAttribute('data-key');
+                const savedValue = localStorage.getItem(key);
+                if (savedValue) {
+                    textarea.value = savedValue;
+                }
+            });
+        }
+
+        function saveData(event) {
+            const textarea = event.target;
+            const key = textarea.getAttribute('data-key');
+            const value = textarea.value;
+            
+            localStorage.setItem(key, value);
+            showStatus('Сохранено', 'saved');
+        }
+
+        function clearTable() {
+            if (confirm('Вы уверены, что хотите очистить всю таблицу? Это действие нельзя отменить.')) {
+                const textareas = document.querySelectorAll('textarea[data-key]');
+                textareas.forEach(textarea => {
+                    textarea.value = '';
+                    const key = textarea.getAttribute('data-key');
+                    localStorage.removeItem(key);
+                });
+                showStatus('Таблица очищена', 'cleared');
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status show ${type}`;
+            
+            setTimeout(() => {
+                status.className = 'status';
+            }, 2000);
+        }
+
+        function openLightbox(src) {
+            const index = galleryImages.indexOf(src);
+            currentImageIndex = index !== -1 ? index : 0;
+            
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = galleryImages[currentImageIndex];
+            lightboxCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function changeImage(direction, event) {
+            event.stopPropagation();
+            currentImageIndex += direction;
+            
+            if (currentImageIndex < 0) {
+                currentImageIndex = galleryImages.length - 1;
+            } else if (currentImageIndex >= galleryImages.length) {
+                currentImageIndex = 0;
+            }
+            
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCounter = document.getElementById('lightbox-counter');
+            
+            lightboxImg.src = galleryImages[currentImageIndex];
+            lightboxCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const lightbox = document.getElementById('lightbox');
+            
+            if (event.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            } else if (event.key === 'ArrowLeft' && lightbox.classList.contains('active')) {
+                changeImage(-1, event);
+            } else if (event.key === 'ArrowRight' && lightbox.classList.contains('active')) {
+                changeImage(1, event);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadData);
+        document.addEventListener('input', saveData);
+    </script>
+</body>
+</html>

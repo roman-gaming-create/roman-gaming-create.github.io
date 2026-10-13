@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Управление кубиком в Unity</title>
+<style>
+  :root { color-scheme: light; --text:#202633; --muted:#596579; --line:#dce2eb; --panel:#f5f7fb; --code:#171c27; --accent:#315fd3; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:28px 16px; background:#eef1f6; color:var(--text); font:16px/1.7 system-ui,-apple-system,"Segoe UI",Arial,sans-serif; }
+  main { max-width:960px; margin:auto; padding:clamp(20px,4vw,48px); background:#fff; border-radius:16px; box-shadow:0 8px 32px #16223712; }
+  h1,h2,h3 { line-height:1.3; }
+  h1 { font-size:clamp(2rem,5vw,2.6rem); }
+  h1,h2 { letter-spacing:-.02em; }
+  h2 { margin-top:2em; padding-bottom:.4em; border-bottom:1px solid var(--line); }
+  p,li { max-width:85ch; }
+  ul,ol { padding-left:1.5em; }
+  code,pre { font-family:Consolas,"Courier New",monospace; }
+  code { overflow-wrap:anywhere; }
+  pre { padding:22px; overflow-x:auto; background:var(--code); color:#f2f5fb; border-radius:12px; font-size:.9rem; line-height:1.55; tab-size:4; }
+  pre code { overflow-wrap:normal; }
+  blockquote { margin:1.2em 0; padding:12px 18px; background:var(--panel); border-left:4px solid var(--accent); }
+  table { border-collapse:collapse; }
+  @media(max-width:600px) { body { padding:0; font-size:15px; } main { border-radius:0; padding:22px 16px; } pre { padding:14px; font-size:.82rem; } }
+  @media print { body { padding:0; background:white; } main { box-shadow:none; max-width:none; padding:0; } pre { white-space:pre-wrap; overflow-wrap:anywhere; } }
+</style>
+</head>
+<body>
+<main>
+
+<div id="content">
+# Глава 1. Введение
+
+Ниже приведён простой и хорошо прокомментированный C# скрипт для Unity, который позволяет кубику-персонажу двигаться по осям X/Z с помощью WASD и прыгать по Space. Скрипт рассчитан на стандартный Rigidbody (физика) и подходит для Windows-сборки. Он использует `FixedUpdate` для стабильной физики и простые проверки ввода.
+
+Предполагается:
+- На объекте-кубике есть компонент **Rigidbody**.
+- Камера и уровень уже настроены (препятствия — обычные коллайдеры).
+- Скрипт вешается прямо на кубик.
+
+# Глава 2. Скрипт движения персонажа-кубика
+
+Создайте файл `CubeController.cs` и вставьте следующий код:
+
+```csharp
+using UnityEngine;
+
+/// &lt;summary&gt;
+/// Простой контроллер движения кубика.
+/// WASD — ходьба, Space — прыжок.
+/// Требует Rigidbody на том же GameObject.
+/// &lt;/summary&gt;
+[RequireComponent(typeof(Rigidbody))]
+public class CubeController : MonoBehaviour
+{
+    [Header(&quot;Настройки движения&quot;)]
+    [Tooltip(&quot;Скорость ходьбы по горизонтали&quot;)]
+    public float moveSpeed = 5f;
+
+    [Tooltip(&quot;Сила прыжка (импульс вверх)&quot;)]
+    public float jumpForce = 7f;
+
+    [Tooltip(&quot;Слой земли для проверки, стоим ли мы на поверхности&quot;)]
+    public LayerMask groundLayer = ~0; // по умолчанию всё
+
+    [Header(&quot;Проверка земли&quot;)]
+    [Tooltip(&quot;Радиус сферы проверки под ногами&quot;)]
+    public float groundCheckRadius = 0.2f;
+
+    [Tooltip(&quot;Смещение точки проверки относительно центра кубика&quot;)]
+    public Vector3 groundCheckOffset = new Vector3(0f, -0.5f, 0f);
+
+    // Кэшированные компоненты
+    private Rigidbody rb;
+
+    // Текущий ввод
+    private float inputX;
+    private float inputZ;
+    private bool jumpRequested;
+
+    // Флаг «на земле»
+    private bool isGrounded;
+
+    void Awake()
+    {
+        // Получаем Rigidbody один раз
+        rb = GetComponent&lt;Rigidbody&gt;();
+
+        // Замораживаем вращение, чтобы кубик не кувыркался
+        rb.freezeRotation = true;
+    }
+
+    void Update()
+    {
+        // Считываем ввод каждый кадр (клавиатура Windows)
+        // WASD или стрелки
+        inputX = Input.GetAxisRaw(&quot;Horizontal&quot;); // A/D или ←/→
+        inputZ = Input.GetAxisRaw(&quot;Vertical&quot;);   // W/S или ↑/↓
+
+        // Прыжок по Space (только в момент нажатия)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpRequested = true;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        // Проверяем, стоим ли на земле
+        CheckGrounded();
+
+        // Движение
+        Move();
+
+        // Прыжок
+        if (jumpRequested)
+        {
+            TryJump();
+            jumpRequested = false; // сбрасываем флаг
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Горизонтальное движение по X и Z.
+    /// &lt;/summary&gt;
+    private void Move()
+    {
+        // Направление в мировых координатах
+        Vector3 moveDirection = new Vector3(inputX, 0f, inputZ).normalized;
+
+        // Желаемая скорость
+        Vector3 targetVelocity = moveDirection * moveSpeed;
+
+        // Сохраняем текущую вертикальную скорость (гравитация/прыжок)
+        targetVelocity.y = rb.velocity.y;
+
+        // Применяем скорость
+        rb.velocity = targetVelocity;
+    }
+
+    /// &lt;summary&gt;
+    /// Попытка прыжка, только если кубик на земле.
+    /// &lt;/summary&gt;
+    private void TryJump()
+    {
+        if (isGrounded)
+        {
+            // Задаём импульс вверх, сохраняя горизонтальную скорость
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Проверка касания земли с помощью OverlapSphere.
+    /// &lt;/summary&gt;
+    private void CheckGrounded()
+    {
+        Vector3 checkPosition = transform.position + groundCheckOffset;
+        isGrounded = Physics.CheckSphere(checkPosition, groundCheckRadius, groundLayer);
+    }
+
+    // Визуализация точки проверки земли в редакторе
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Vector3 checkPosition = transform.position + groundCheckOffset;
+        Gizmos.DrawWireSphere(checkPosition, groundCheckRadius);
+    }
+}
+```
+
+## Как подключить
+1. Добавьте на кубик компонент **Rigidbody**.
+2. Навесьте скрипт `CubeController`.
+3. При необходимости настройте `moveSpeed`, `jumpForce` и слой земли.
+4. Убедитесь, что на препятствиях и полу есть коллайдеры.
+
+# Глава 3. Идея, как усложнить механику
+
+Чтобы расширить возможности персонажа, можно добавить **механику «рывка» (dash)** + **двойной прыжок**.
+
+### Кратко идея
+- **Двойной прыжок**: разрешить один дополнительный прыжок в воздухе (флаг `canDoubleJump`).
+- **Рывок (Dash)** по Shift: короткий быстрый импульс в направлении движения (или взгляда). Во время рывка можно игнорировать часть препятствий или проходить сквозь «хрупкие» объекты.
+- Дополнительно: после рывка небольшая неуязвимость / изменение цвета кубика, чтобы игрок видел откат способности.
+- Управление откатами через таймеры (`dashCooldown`, `dashDuration`).
+
+Это сильно расширяет геймплей: можно преодолевать широкие пропасти, уворачиваться от движущихся препятствий и создавать секретные маршруты, требующие комбинации «двойной прыжок + рывок».
+
+Пример расширения (фрагмент логики, который можно добавить в тот же скрипт):
+- Ввести переменные `bool canDoubleJump`, `float dashForce`, `float dashCooldown`.
+- В `TryJump` разрешить второй прыжок, если `!isGrounded &amp;&amp; canDoubleJump`.
+- По нажатию LeftShift запускать корутину рывка, которая на короткое время задаёт высокую скорость и затем возвращает управление.
+
+# Глава 4. Рекомендации и возможные улучшения
+
+- Добавьте анимацию/смену цвета при прыжке и рывке (через Material).
+- Используйте `CharacterController` вместо Rigidbody, если нужна более «аркадная» физика без скольжения.
+- Для более точного контроля земли можно заменить `CheckSphere` на `Raycast` или `CapsuleCast`.
+- Добавьте звуки шагов и прыжка через `AudioSource`.
+- Ограничьте максимальную скорость падения, чтобы кубик не «проваливался» сквозь пол на высоких скоростях.
+
+Скрипт выше полностью готов к использованию и легко расширяется. Удачи с мини-игрой!
+</div>
+</main>
+<script>
+/* Отображаем исходный Markdown без изменения текста, сохраняя все символы. */
+const source = document.getElementById('content');
+const raw = source.textContent;
+source.textContent = '';
+const pre = document.createElement('pre');
+pre.style.cssText = 'white-space:pre-wrap;overflow-wrap:anywhere;background:white;color:inherit;padding:0;border-radius:0;font:inherit;line-height:1.7;';
+pre.textContent = raw;
+source.appendChild(pre);
+</script>
+</body>
+</html>
