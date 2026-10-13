@@ -466,9 +466,11 @@
             box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
 
+        /* === Стили таблицы как на скриншоте === */
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid #a0b4c8;
         }
 
         table {
@@ -479,53 +481,53 @@
         }
 
         thead {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            background: #3498db;
             color: white;
         }
 
         th {
-            padding: 15px 12px;
+            padding: 14px 12px;
             text-align: left;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border: 2px solid #2980b9;
+            border: 1px solid #a0b4c8;
+            color: white;
         }
 
         td {
             padding: 0;
-            border: 2px solid #2c3e50;
+            border: 1px solid #a0b4c8;
             vertical-align: top;
         }
 
         .ai-name {
             padding: 12px;
-            background: #f8fbff;
-            font-weight: 600;
-            color: #1a5276;
+            background: white;
+            font-weight: 700;
+            color: #2980b9;
             font-size: 14px;
-            min-width: 130px;
-            border: 2px solid #2c3e50;
+            min-width: 150px;
         }
 
         textarea {
             width: 100%;
-            min-height: 70px;
-            padding: 10px;
+            min-height: 60px;
+            padding: 12px;
             border: none;
             resize: vertical;
             font-family: inherit;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
             background: transparent;
             color: #2c3e50;
-            transition: background 0.2s ease;
+            box-sizing: border-box;
         }
 
         textarea:focus {
             outline: none;
-            background: #e3f2fd;
+            background: #f8fbff;
         }
 
         textarea::placeholder {
@@ -533,34 +535,13 @@
             font-style: italic;
         }
 
-        .status {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .status.show {
-            opacity: 1;
-        }
-
-        .status.saved {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status.cleared {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
+        /* Скрываем кнопку очистки и статус */
         .bottom-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
+            display: none;
+        }
+
+        .status {
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -586,19 +567,23 @@
 
             th {
                 padding: 10px 8px;
-                font-size: 11px;
+                font-size: 10px;
+            }
+
+            td {
+                font-size: 13px;
             }
 
             .ai-name {
-                padding: 8px;
-                font-size: 12px;
-                min-width: 100px;
+                padding: 10px 8px;
+                font-size: 13px;
+                min-width: 110px;
             }
 
             textarea {
-                min-height: 60px;
-                font-size: 12px;
-                padding: 8px;
+                min-height: 50px;
+                font-size: 13px;
+                padding: 10px 8px;
             }
 
             .prompt-block {
@@ -684,51 +669,49 @@
                 <tbody>
                     <tr>
                         <td class="ai-name">ChatGPT</td>
-                        <td>Средняя</td>
-                        <td>Хорошее</td>
-                        <td>Отличное</td>
-                        <td>Отличное</td>
+                        <td><textarea data-key="chatgpt_speed">Средняя</textarea></td>
+                        <td><textarea data-key="chatgpt_quality">Хорошее</textarea></td>
+                        <td><textarea data-key="chatgpt_context">Отличное</textarea></td>
+                        <td><textarea data-key="chatgpt_russian">Отличное</textarea></td>
                     </tr>
                     <tr>
                         <td class="ai-name">Google Gemini</td>
-                        <td>Средняя</td>
-                        <td>Хорошее</td>
-                        <td>Хорошее</td>
-                        <td>Хорошее ~ Отличное</td>
+                        <td><textarea data-key="gemini_speed">Средняя</textarea></td>
+                        <td><textarea data-key="gemini_quality">Хорошее</textarea></td>
+                        <td><textarea data-key="gemini_context">Хорошее</textarea></td>
+                        <td><textarea data-key="gemini_russian">Хорошее ~ Отличное</textarea></td>
                     </tr>
                     <tr>
                         <td class="ai-name">Deepseek</td>
-                        <td>Отличная</td>
-                        <td>Среднее</td>
-                        <td>Среднее ~ Хорошее</td>
-                        <td>Хорошее</td>
+                        <td><textarea data-key="deepseek_speed">Отличная</textarea></td>
+                        <td><textarea data-key="deepseek_quality">Среднее</textarea></td>
+                        <td><textarea data-key="deepseek_context">Среднее ~ Хорошее</textarea></td>
+                        <td><textarea data-key="deepseek_russian">Хорошее</textarea></td>
                     </tr>
                     <tr>
                         <td class="ai-name">GigaChat</td>
-                        <td>Отличная</td>
-                        <td>Хорошее</td>
-                        <td>Отличное</td>
-                        <td>Отличное</td>
+                        <td><textarea data-key="gigachat_speed">Отличная</textarea></td>
+                        <td><textarea data-key="gigachat_quality">Хорошее</textarea></td>
+                        <td><textarea data-key="gigachat_context">Отличное</textarea></td>
+                        <td><textarea data-key="gigachat_russian">Отличное</textarea></td>
                     </tr>
                     <tr>
                         <td class="ai-name">Grok</td>
-                        <td>Средняя</td>
-                        <td>Среднее</td>
-                        <td>Хорошее ~ Отличное</td>
-                        <td>Хорошее</td>
+                        <td><textarea data-key="grok_speed">Средняя</textarea></td>
+                        <td><textarea data-key="grok_quality">Среднее</textarea></td>
+                        <td><textarea data-key="grok_context">Хорошее ~ Отличное</textarea></td>
+                        <td><textarea data-key="grok_russian">Хорошее</textarea></td>
                     </tr>
                     <tr>
                         <td class="ai-name">LMarena (Chatbot Arena)</td>
-                        <td colspan="4">
-                        <td></td>
-                    </td>
+                        <td colspan="4"><textarea data-key="lmarena_general" style="min-height: 80px;">Отличная платформа для тестирования различных моделей ИИ, удобный интерфейс и управление результатами.</textarea></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="bottom-button">
-            <button class="btn-clear" onclick="clearTable()">️ 🗑️ Очистить таблицу</button>
+            <button class="btn-clear" onclick="clearTable()">️ Очистить таблицу</button>
         </div>
 
         <div class="results-links-block">
@@ -764,7 +747,7 @@
         </div>
 
         <div class="conclusion-block">
-            <h2> Вывод по тестированию</h2>
+            <h2>📊 Вывод по тестированию</h2>
             <p>В процессе тестирования нейросетей я решил задать им одну и ту же задачу, чтобы сравнить их в одинаковых условиях.</p>
             
             <p class="prompt-label">📝 Промпт, заданный нейросетям:</p>
