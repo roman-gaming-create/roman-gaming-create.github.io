@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Творческие матрицы для VR-игр</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #f0f0f0;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #00f7ff;
+      text-shadow: 0 0 12px rgba(0, 247, 255, 0.6);
+      font-size: 2.2em;
+    }
+
+    .matrix {
+      background: rgba(15, 12, 41, 0.75);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 45px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      border: 1px solid #4a428a;
+    }
+
+    .matrix h2 {
+      color: #ff55d9;
+      margin-top: 0;
+      border-bottom: 2px solid #ff55d9;
+      padding-bottom: 10px;
+      font-size: 1.6em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+      margin-bottom: 18px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: center;
+      border: 1px solid #4a428a;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    @media (min-width: 900px) {
+      th, td {
+        font-size: 15px;
+      }
+    }
+
+    th {
+      background: #0a071e;
+      color: #00f7ff;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    td {
+      background: #1e1a3a;
+      color: #e0e0ff;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-width: 90px;
+      word-wrap: break-word;
+    }
+
+    td:hover {
+      background: #2d2850;
+    }
+
+    td.editing {
+      background: #002233;
+    }
+
+    input.edit-input {
+      width: 90%;
+      padding: 6px;
+      border: none;
+      border-radius: 4px;
+      background: #0c0920;
+      color: #00f7ff;
+      font-size: 14px;
+      outline: 1px solid #00aaff;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    button {
+      background: #ff55d9;
+      color: #0a071e;
+      border: none;
+      padding: 9px 18px;
+      margin: 0 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #ff33cc;
+      transform: scale(1.03);
+    }
+
+    .copyright-divider,
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+      margin: 30px 0;
+      padding-top: 20px;
+      border-top: 1px solid #3a3560;
+    }
+
+    @media (max-width: 768px) {
+      th, td {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+      button {
+        padding: 7px 14px;
+        font-size: 13px;
+        margin: 0 6px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+      .copyright-divider,
+      footer {
+        font-size: 14px;
+        margin: 20px 0;
+        padding-top: 15px;
+        border-top: 1px solid #3a3560;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Творческие матрицы для VR-игр</h1>
+
+    <!-- Матрица 1 -->
+    <div class="matrix" id="matrix1">
+      <h2>Матрица №1: Жанр × Среда</h2>
+      <p><em>Кликните на ячейку, чтобы записать идею!</em></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Жанр ↓ \ Среда →</th>
+            <th>Космос</th>
+            <th>Подводный мир</th>
+            <th>Неоновый мегаполис</th>
+            <th>Древний лес</th>
+            <th>Лаборатория</th>
+            <th>Сказочное королевство</th>
+            <th>Пустыня</th>
+            <th>Облака / небо</th>
+            <th>Подземелье</th>
+            <th>Музей будущего</th>
+            <th>Киберпространство</th>
+            <th>Сон / подсознание</th>
+            <th>Абстрактное пространство</th>
+            <th>Постапокалипсис</th>
+            <th>Микромир</th>
+            <th>Вулкан / лава</th>
+            <th>Зеркальный мир</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Приключение</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Головоломка</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Симулятор</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Хоррор</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Аркада</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Образовательная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Ролевая (RPG)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Музыкальная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Социальная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Экспериментальная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Нарративная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Медитативная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Физическая</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Коллаборативная</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="buttons">
+        <button onclick="clearMatrix('matrix1')">Очистить матрицу</button>
+        <button onclick="copyIdeas('matrix1')">Скопировать идеи</button>
+      </div>
+    </div>
+
+    <!-- Копирайт между таблицами — теперь в том же стиле, что и внизу -->
+    <div class="copyright-divider">
+      
+    </div>
+
+    <!-- Матрица 2 -->
+    <div class="matrix" id="matrix2">
+      <h2>Матрица №2: Взаимодействие × Эмоция</h2>
+      <p><em>Определите, как игрок взаимодействует с миром и какие чувства это вызывает.</em></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Взаимодействие ↓ \ Эмоция →</th>
+            <th>Удивление</th>
+            <th>Страх</th>
+            <th>Радость</th>
+            <th>Любопытство</th>
+            <th>Напряжение</th>
+            <th>Вдохновение</th>
+            <th>Спокойствие</th>
+            <th>Ощущение силы</th>
+            <th>Ностальгия</th>
+            <th>Тревога</th>
+            <th>Эмпатия</th>
+            <th>Изумление</th>
+            <th>Освобождение</th>
+            <th>Чувство связи</th>
+            <th>Детское волшебство</th>
+            <th>Экзистенциальное осознание</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Хватать / перемещать</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Стрелять / метать</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Рисовать / создавать</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Ходить / исследовать</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Говорить / выбирать диалог</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Решать головоломки</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Танцевать / двигаться</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Манипулировать временем</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Выращивать / ухаживать</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Собирать звуки / музыку</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Дышать / контролировать дыхание</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Создавать мосты / связи</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Превращаться / менять форму</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Наблюдать за другими игроками</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="buttons">
+        <button onclick="clearMatrix('matrix2')">Очистить матрицу</button>
+        <button onclick="copyIdeas('matrix2')">Скопировать идеи</button>
+      </div>
+    </div>
+
+    <footer>
+      © RomanGamingCreate, 2025
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('td').forEach(cell => {
+      if (cell.textContent.trim() === '') {
+        cell.addEventListener('click', function() {
+          if (this.querySelector('input')) return;
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'edit-input';
+          input.value = this.textContent.trim();
+          this.innerHTML = '';
+          this.appendChild(input);
+          this.classList.add('editing');
+          input.focus();
+
+          const save = () => {
+            this.textContent = input.value.trim();
+            this.classList.remove('editing');
+          };
+
+          input.addEventListener('blur', save);
+          input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') save();
+          });
+        });
+      }
+    });
+
+    function clearMatrix(matrixId) {
+      if (!confirm('Очистить всю матрицу? Это действие нельзя отменить.')) return;
+      const matrix = document.getElementById(matrixId);
+      const tds = matrix.querySelectorAll('td:not(:first-child)');
+      tds.forEach(td => {
+        if (!td.querySelector('button')) {
+          td.textContent = '';
+        }
+      });
+    }
+
+    function copyIdeas(matrixId) {
+      const matrix = document.getElementById(matrixId);
+      const rows = matrix.querySelectorAll('tbody tr');
+      let text = `Идеи из ${matrix.querySelector('h2').textContent}:\n\n`;
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const label = cells[0].textContent;
+        const ideas = [];
+        const headers = matrix.querySelectorAll('th');
+        for (let i = 1; i < cells.length && i < headers.length; i++) {
+          const content = cells[i].textContent.trim();
+          if (content) {
+            const header = headers[i].textContent;
+            ideas.push(`${header}: "${content}"`);
+          }
+        }
+        if (ideas.length > 0) {
+          text += `${label} → ${ideas.join('; ')}\n`;
+        }
+      });
+
+      if (text.includes('→')) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('✅ Идеи скопированы! Вставьте их в ИИ или документ.');
+        }).catch(err => {
+          console.error('Ошибка копирования:', err);
+          alert('Не удалось скопировать. Попробуйте выделить и скопировать вручную.');
+        });
+      } else {
+        alert('Нет заполненных идей для копирования.');
+      }
+    }
+  </script>
+</body>
+</html>
