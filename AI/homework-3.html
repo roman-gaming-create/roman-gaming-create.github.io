@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашнее задание №3 — Продуктовая линейка и воронка продаж</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf9);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .main-title {
+            text-align: center;
+            color: #1a5276;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .main-subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d6eaf8;
+        }
+
+        /* === НАВИГАЦИОННАЯ ПАНЕЛЬ === */
+        .nav-panel {
+            background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-panel h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn .nav-emoji {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn .nav-text {
+            line-height: 1.3;
+        }
+
+        /* Кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            transition: all 0.3s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2980b9;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        h2 {
+            color: #1a5276;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        h3 {
+            color: #2874a6;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        h4 {
+            color: #2980b9;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        .section-block {
+            background: #f8fbff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #d6eaf8;
+        }
+
+        .guide-page {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #d6eaf8;
+        }
+
+        .guide-page h3 {
+            color: #1a5276;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .data-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e6ed;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8fbff;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .idea-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .journey-step {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #d6eaf8;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+
+        .journey-step strong {
+            display: block;
+            color: #1a5276;
+            font-size: 16px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .journey-step span {
+            color: #2c3e50;
+            font-size: 14px;
+            display: block;
+            text-align: center;
+        }
+
+        .journey-arrow {
+            text-align: center;
+            color: #3498db;
+            font-size: 22px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        .lead-magnet-card {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .lead-magnet-card h4 {
+            color: #1a5276;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .lead-magnet-meta {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #2980b9;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .lead-magnet-value {
+            color: #2c3e50;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0;
+        }
+
+        .steps-list li {
+            padding-left: 35px;
+            position: relative;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .steps-list li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            background: #3498db;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .tripwire-funnel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #d6eaf8;
+        }
+
+        .tripwire-funnel-step {
+            background: #f8fbff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            border: 1px solid #d6eaf8;
+        }
+
+        .tripwire-funnel-step strong {
+            color: #1a5276;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .tripwire-funnel-step span {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .tripwire-funnel-arrow {
+            text-align: center;
+            color: #3498db;
+            font-size: 24px;
+            margin: 5px 0;
+        }
+
+        .sign-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0;
+        }
+
+        .sign-list li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .sign-list li::before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .advice-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #27ae60;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .advice-box h4 {
+            color: #1a5276;
+            margin-top: 0;
+        }
+
+        .example-box {
+            background: #f8fbff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px dashed #3498db;
+        }
+
+        .example-box strong {
+            color: #2980b9;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 3px solid #27ae60;
+        }
+
+        .result-box strong {
+            color: #1a5276;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .vk-day-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .vk-day-card.informational { border-left-color: #3498db; }
+        .vk-day-card.engaging { border-left-color: #27ae60; }
+        .vk-day-card.entertaining { border-left-color: #f39c12; }
+        .vk-day-card.selling { border-left-color: #e74c3c; }
+
+        .vk-day-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .vk-day-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a5276;
+        }
+
+        .vk-content-type {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .vk-content-type.informational { background: #3498db; }
+        .vk-content-type.engaging { background: #27ae60; }
+        .vk-content-type.entertaining { background: #f39c12; }
+        .vk-content-type.selling { background: #e74c3c; }
+        .vk-content-type.mixed { background: linear-gradient(135deg, #f39c12 0%, #e74c3c 100%); }
+
+        .vk-topic {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a5276;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .vk-format {
+            background: #e3f2fd;
+            color: #2980b9;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .vk-section { margin-bottom: 12px; }
+        .vk-section strong {
+            color: #1a5276;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .vk-section ul, .vk-section ol {
+            padding-left: 22px;
+            margin: 8px 0;
+        }
+        .vk-section li {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .vk-call-to-action {
+            background: linear-gradient(135deg, #e8f6f3 0%, #d1f2eb 100%);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #1abc9c;
+            margin: 12px 0;
+        }
+
+        .vk-call-to-action strong { color: #1a5276; }
+
+        .vk-goal {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #f39c12;
+            margin: 12px 0;
+        }
+
+        .vk-goal strong { color: #1a5276; }
+
+        .vk-ideas-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+
+        .vk-ideas-list li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .vk-ideas-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0;
+        }
+
+        .rules-list li {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .rules-list li strong {
+            color: #1a5276;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .headline-card {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .headline-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .headline-number {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .headline-text {
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.5;
+            font-style: italic;
+            padding-top: 8px;
+        }
+
+        .headline-category {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .headline-category.attention {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .headline-category.expertise {
+            border-left: 5px solid #3498db;
+        }
+
+        .headline-category.sale {
+            border-left: 5px solid #27ae60;
+        }
+
+        .headline-category h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .headline-category.attention h4 { color: #e74c3c; }
+        .headline-category.expertise h4 { color: #3498db; }
+        .headline-category.sale h4 { color: #27ae60; }
+
+        .headline-category-numbers {
+            display: inline-block;
+            background: #f8fbff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            color: #1a5276;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, #e8f6f3 0%, #d1f2eb 100%);
+            padding: 20px 25px;
+            border-radius: 10px;
+            border-left: 5px solid #1abc9c;
+            margin-top: 20px;
+        }
+
+        .recommendation-box h4 {
+            color: #1a5276;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .rec-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .how-headline-card {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #9b59b6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .how-headline-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .how-headline-number {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .how-headline-text {
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.5;
+            font-style: italic;
+            padding-top: 8px;
+        }
+
+        .how-headline-text strong {
+            color: #9b59b6;
+            font-style: normal;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f5eef8 0%, #ebdef0 100%);
+            padding: 18px 22px;
+            border-radius: 10px;
+            border-left: 5px solid #9b59b6;
+            margin: 20px 0;
+        }
+
+        .formula-box strong {
+            color: #1a5276;
+        }
+
+        .formula-box .formula {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 600;
+            color: #9b59b6;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sub-section-title {
+            color: #1a5276;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed #d6eaf8;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; max-width: 100%; }
+            .main-title { font-size: 22px; }
+            .data-table { font-size: 12px; }
+            .data-table th, .data-table td { padding: 8px 10px; }
+            .guide-page { padding: 15px; }
+            .vk-day-card { padding: 15px; }
+            .vk-day-name { font-size: 18px; }
+            .headline-card, .how-headline-card { flex-direction: column; gap: 10px; }
+            .nav-grid { grid-template-columns: 1fr; }
+            .nav-btn { font-size: 13px; padding: 10px 14px; }
+            .back-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">📚 Домашнее задание №3</h1>
+        <p class="main-subtitle">Курс «Нейросети и ИИ» — Продуктовая линейка и воронка продаж</p>
+
+        <!-- НАВИГАЦИОННАЯ ПАНЕЛЬ -->
+        <div class="nav-panel">
+            <h3>📖 Навигация по разделам</h3>
+            <div class="nav-grid">
+                <a href="#funnel" class="nav-btn">
+                    <span class="nav-emoji">🚀</span>
+                    <span class="nav-text">Воронка продаж</span>
+                </a>
+                <a href="#lead-magnets" class="nav-btn">
+                    <span class="nav-emoji">📋</span>
+                    <span class="nav-text">20 идей лид-магнитов</span>
+                </a>
+                <a href="#lead-magnets-priority" class="nav-btn">
+                    <span class="nav-emoji">🎯</span>
+                    <span class="nav-text">Приоритетные лид-магниты</span>
+                </a>
+                <a href="#lead-magnets-sales" class="nav-btn">
+                    <span class="nav-emoji">🔗</span>
+                    <span class="nav-text">Связь с продажей</span>
+                </a>
+                <a href="#tripwires" class="nav-btn">
+                    <span class="nav-emoji">💰</span>
+                    <span class="nav-text">20 идей трипвайеров</span>
+                </a>
+                <a href="#tripwires-priority" class="nav-btn">
+                    <span class="nav-emoji">💼</span>
+                    <span class="nav-text">Три продукта для теста</span>
+                </a>
+                <a href="#tripwires-funnel" class="nav-btn">
+                    <span class="nav-emoji">🔄</span>
+                    <span class="nav-text">Встраивание в воронку</span>
+                </a>
+                <a href="#guide" class="nav-btn">
+                    <span class="nav-emoji">📖</span>
+                    <span class="nav-text">Готовый гайд (3 стр.)</span>
+                </a>
+                <a href="#vk-content" class="nav-btn">
+                    <span class="nav-emoji">📱</span>
+                    <span class="nav-text">Контент-план VK (7 дней)</span>
+                </a>
+                <a href="#headlines" class="nav-btn">
+                    <span class="nav-emoji">🎣</span>
+                    <span class="nav-text">Триггерные заголовки</span>
+                </a>
+            </div>
+        </div>
+
+        <h1 id="funnel">🚀 Воронка продаж</h1>
+
+        <div class="section-block">
+            <p>С учётом экспертного профиля — опыт в IT с 2008 года, диагностика и ремонт техники, а также управление сервисным центром — предлагаю воронку продаж для услуги IT-поддержки и технического сопровождения малого и среднего бизнеса.</p>
+
+            <div class="highlight-box">
+                Это предварительная бизнес-гипотеза: прежде чем вкладываться в продвижение, нужно проверить спрос и готовность клиентов платить за такую услугу.
+            </div>
+
+            <h3>Воронка продаж: от знакомства до покупки</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Элемент воронки</th>
+                        <th style="width: 30%;">Название продукта/идеи</th>
+                        <th style="width: 50%;">Краткое описание ценности для клиента</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Бесплатный лид-магнит</strong></td>
+                        <td>«Чек-лист: 15 причин, почему IT в офисе работает нестабильно»</td>
+                        <td>Бесплатный PDF с проверкой компьютеров, сети, резервного копирования и обновлений. Помогает бизнесу обнаружить потенциальные проблемы и понять, когда нужна помощь специалиста. Обмен на email или заявку на консультацию.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Трипвайер</strong></td>
+                        <td>«Экспресс-аудит IT за фиксированную цену»</td>
+                        <td>Разовая проверка IT-среды по согласованному списку: компьютеры, сеть, резервное копирование и основные риски. Клиент получает краткий отчёт с приоритетами и рекомендациями без необходимости сразу заказывать комплексное обслуживание.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Основной продукт</strong></td>
+                        <td>«IT-поддержка бизнеса под ключ»</td>
+                        <td>Регулярное сопровождение рабочих компьютеров, программного обеспечения, сети и серверов в согласованном объёме. Клиент получает понятный порядок обращения за помощью, приоритеты решения проблем и плановое обслуживание. Формат и стоимость зависят от инфраструктуры и SLA.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Апселл-продукт</strong></td>
+                        <td>«IT-инфраструктура под контролем: резервное копирование, мониторинг и автоматизация»</td>
+                        <td>Дополнительный пакет для клиентов на обслуживании: настройка и проверка резервного копирования, мониторинг доступности систем, автоматизация повторяющихся задач и регулярный отчёт о состоянии инфраструктуры. Помогает повысить управляемость и снизить риск незамеченных проблем.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Как клиент проходит воронку</h3>
+
+            <div class="journey-step">
+                <strong>Привлечение внимания</strong>
+                <span>Чек-лист в обмен на контакт</span>
+            </div>
+
+            <div class="journey-arrow">↓</div>
+
+            <div class="journey-step">
+                <strong>Первый платный опыт</strong>
+                <span>Экспресс-аудит и конкретные рекомендации</span>
+            </div>
+
+            <div class="journey-arrow">↓</div>
+
+            <div class="journey-step">
+                <strong>Основная продажа</strong>
+                <span>Регулярное IT-обслуживание по договору</span>
+            </div>
+
+            <div class="journey-arrow">↓</div>
+
+            <div class="journey-step">
+                <strong>Рост ценности и среднего чека</strong>
+                <span>Мониторинг, резервное копирование, автоматизация</span>
+            </div>
+
+            <div class="idea-box">
+                <strong>Главная идея:</strong> сначала дать клиенту полезный материал, затем продемонстрировать экспертность на небольшой платной услуге, предложить регулярное обслуживание и только после выявления потребностей расширять сотрудничество.
+            </div>
+
+            <p>Так воронка опирается на твоё позиционирование: не просто устранять неисправности, а находить причины проблем и организовывать надёжную IT-поддержку.</p>
+        </div>
+
+        <!-- Раздел: 20 идей лид-магнитов -->
+        <div class="section-block">
+            <h2 id="lead-magnets">📋 20 идей лид-магнитов для привлечения клиентов</h2>
+            <p>Для твоей воронки продаж предлагаю 20 лид-магнитов, ориентированных на малый и средний бизнес, которому нужна IT-поддержка, обслуживание компьютеров, сетей и серверов. Они также подчеркнут твоё конкурентное преимущество: ты не просто устраняешь технические неисправности, а умеешь находить их причины и системно подходить к организации IT-сервиса.</p>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">PDF чек-лист</span>
+                <h4>1. 15 признаков, что IT-инфраструктура вашего бизнеса нуждается в проверке</h4>
+                <p class="lead-magnet-value">Клиент отмечает симптомы проблем с компьютерами, сетью, обновлениями и резервными копиями. Получает первичное представление о потенциальных рисках.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Интерактивный тест</span>
+                <h4>2. Самодиагностика IT за 10 минут</h4>
+                <p class="lead-magnet-value">Отвечая на вопросы о сбоях, скорости работы и обслуживании, клиент получает предварительную оценку состояния IT и список направлений для проверки.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Excel-шаблон</span>
+                <h4>3. Готовая таблица учёта компьютеров и оборудования</h4>
+                <p class="lead-magnet-value">Позволяет собрать в одном месте список устройств, пользователей, серийных номеров, гарантий и состояния оборудования.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">PDF инструкция</span>
+                <h4>4. 7 простых способов ускорить рабочий компьютер</h4>
+                <p class="lead-magnet-value">Пользователь выполняет безопасные базовые действия по очистке, обновлениям и проверке автозагрузки. Сразу видит, какие улучшения доступны без покупки нового компьютера.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Чек-лист + таблица</span>
+                <h4>5. Резервное копирование: готов ли ваш бизнес к потере данных?</h4>
+                <p class="lead-magnet-value">Помогает проверить наличие резервных копий, дату последнего успешного копирования и возможность восстановления. Выявляет пробелы в процессе защиты данных.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Одностраничная инструкция</span>
+                <h4>6. Что делать, если в офисе пропал интернет?</h4>
+                <p class="lead-magnet-value">Пошаговый алгоритм первичной диагностики: одно устройство или вся сеть, подключение, роутер, доступность сервисов. Помогает быстрее определить масштаб проблемы.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Excel калькулятор</span>
+                <h4>7. Калькулятор стоимости IT-простоев</h4>
+                <p class="lead-magnet-value">Клиент вводит количество сотрудников, длительность сбоя и приблизительную стоимость рабочего часа. Получает ориентировочную оценку потерь и понимает финансовую значимость стабильной IT-среды.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Мини-гид в PDF</span>
+                <h4>8. 10 ошибок в организации IT-поддержки малого бизнеса</h4>
+                <p class="lead-magnet-value">Показывает распространённые организационные проблемы: отсутствие учёта техники, ответственных, документации и порядка обработки заявок. Помогает найти точки улучшения.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Google Forms шаблон</span>
+                <h4>9. Шаблон заявки на IT-поддержку</h4>
+                <p class="lead-magnet-value">Помогает сотрудникам описывать проблему, указывать устройство, время возникновения и симптомы. IT-специалист получает более качественные исходные данные для диагностики.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Сравнительная таблица</span>
+                <h4>10. Как выбрать IT-подрядчика и не переплатить</h4>
+                <p class="lead-magnet-value">Даёт критерии оценки предложений: перечень услуг, время реакции, исключения, безопасность, стоимость и ответственность. Помогает сравнивать подрядчиков на понятных условиях.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">PDF схема решений</span>
+                <h4>11. Windows не загружается: алгоритм первичной диагностики</h4>
+                <p class="lead-magnet-value">Помогает различить типичные симптомы проблем с запуском и определить безопасные первые шаги. Предупреждает о действиях, которые могут привести к потере данных.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Чек-лист самооценки</span>
+                <h4>12. Аудит IT-безопасности за 20 минут</h4>
+                <p class="lead-magnet-value">Позволяет проверить базовые меры: обновления, MFA, права доступа, защиту учётных записей и резервное копирование. Клиент получает перечень приоритетных направлений для улучшения.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Видеоурок</span>
+                <h4>13. Видео: 5 причин, почему компьютер тормозит, и как их проверить</h4>
+                <p class="lead-magnet-value">На наглядных примерах показывает первичную диагностику производительности. Клиент лучше понимает проблему и видит практический стиль работы специалиста.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Шаблон схемы</span>
+                <h4>14. Карта IT-инфраструктуры офиса за 30 минут</h4>
+                <p class="lead-magnet-value">Помогает визуально обозначить компьютеры, серверы, сетевое оборудование, интернет и ключевые связи. Клиент получает начальную схему инфраструктуры и замечает неизвестные или неучтённые элементы.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Excel календарь</span>
+                <h4>15. План IT-обслуживания на 12 месяцев</h4>
+                <p class="lead-magnet-value">Готовый календарь для планирования обновлений, проверок резервных копий, инвентаризации, ревизии доступов и обслуживания оборудования. Помогает перейти от хаотичных обращений к плановой работе.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Интерактивный калькулятор</span>
+                <h4>16. Что выгоднее: ремонтировать компьютер или заменить?</h4>
+                <p class="lead-magnet-value">Сравнивает ориентировочную стоимость ремонта, замены и дальнейшей эксплуатации. Помогает обосновать решение на основе расходов, возраста устройства и требований бизнеса.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">PDF справочник</span>
+                <h4>17. IT-словарь для руководителя: 25 терминов простыми словами</h4>
+                <p class="lead-magnet-value">Объясняет понятия вроде сервера, VPN, домена, MFA, резервного копирования и SLA. Помогает руководителю увереннее обсуждать технические задачи с подрядчиками.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Excel шаблон + гид</span>
+                <h4>18. Как оценить качество IT-поддержки: 8 показателей для руководителя</h4>
+                <p class="lead-magnet-value">Даёт шаблон учёта числа обращений, времени реакции, времени решения и повторных инцидентов. Помогает увидеть нагрузку и определить, какие процессы требуют внимания.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">PDF плейбук</span>
+                <h4>19. План действий при серьёзном IT-сбое</h4>
+                <p class="lead-magnet-value">Предлагает порядок действий при недоступности ключевых систем: определить масштаб, назначить ответственного, зафиксировать события, уведомить пользователей и организовать восстановление.</p>
+            </div>
+
+            <div class="lead-magnet-card">
+                <span class="lead-magnet-meta">Опросник с отчётом</span>
+                <h4>20. Персональная карта IT-рисков компании</h4>
+                <p class="lead-magnet-value">Клиент отвечает на вопросы о своей инфраструктуре и получает предварительный список рисков с приоритетами. Логичный следующий шаг — заказать профессиональный аудит для проверки выводов.</p>
+            </div>
+        </div>
+
+        <!-- Рекомендации по запуску лид-магнитов -->
+        <div class="section-block">
+            <h2 id="lead-magnets-priority">🎯 Какие лид-магниты я рекомендую запустить первыми</h2>
+            <p>Необязательно создавать все 20 материалов. Для начала лучше проверить несколько идей, которые решают разные задачи клиента.</p>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥇 Приоритет 1</span>
+                <h4>1. Чек-лист «15 признаков, что IT-инфраструктура нуждается в проверке»</h4>
+                <p><strong>Цель:</strong> Привлечение аудитории</p>
+                <p>Создаётся быстро, подходит руководителям и помогает привлечь людей, которые ещё не готовы покупать услугу.</p>
+            </div>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥈 Приоритет 2</span>
+                <h4>2. Шаблон учёта оборудования</h4>
+                <p><strong>Цель:</strong> Практическая польза</p>
+                <p>Клиент сразу получает готовый рабочий инструмент, а ты демонстрируешь системный подход к управлению IT.</p>
+            </div>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥉 Приоритет 3</span>
+                <h4>3. Персональная карта IT-рисков</h4>
+                <p><strong>Цель:</strong> Переход к продаже</p>
+                <p>Связывает бесплатную пользу с твоей основной услугой: предварительная самооценка → платный аудит → регулярное обслуживание.</p>
+            </div>
+        </div>
+
+        <!-- Как связать лид-магниты с продажей -->
+        <div class="section-block">
+            <h2 id="lead-magnets-sales">🔗 Как связать лид-магниты с продажей</h2>
+            <p>Оптимальная последовательность для нашего продукта:</p>
+
+            <ol class="steps-list">
+                <li data-step="1"><strong>Привлечь внимание:</strong> чек-лист, видео или тест.</li>
+                <li data-step="2"><strong>Показать персональную проблему:</strong> калькулятор простоев или карта IT-рисков.</li>
+                <li data-step="3"><strong>Предложить следующий шаг:</strong> экспресс-аудит IT за фиксированную цену.</li>
+                <li data-step="4"><strong>Продать основную услугу:</strong> регулярная IT-поддержка.</li>
+                <li data-step="5"><strong>Увеличить ценность сотрудничества:</strong> мониторинг, резервное копирование, автоматизация и плановое обслуживание.</li>
+            </ol>
+
+            <div class="highlight-box">
+                <strong>Важно:</strong> лид-магнит должен помогать человеку самостоятельно решить небольшую задачу, но не обещать полноценную диагностику инфраструктуры без необходимых проверок. Результат теста или калькулятора лучше обозначать как предварительную оценку.
+            </div>
+        </div>
+
+        <!-- Раздел: 20 идей трипвайеров -->
+        <div class="section-block">
+            <h2 id="tripwires">💰 20 идей платных продуктов для воронки продаж (Трипвайеры)</h2>
+            <p>Для твоей воронки я бы строил платные продукты вокруг перехода от бесплатной самодиагностики к конкретному решению IT-проблемы, а затем — к основной услуге: комплексной IT-поддержке и техническому сопровождению малого и среднего бизнеса.</p>
+
+            <div class="highlight-box">
+                С учётом моего опыта с 2008 года и сочетания инженерной работы с управлением сервисным центром, тебе подойдут не только недорогие консультации, но и продукты, которые демонстрируют системный подход к IT.
+            </div>
+
+            <p><strong>Примечание:</strong> Ниже — 20 идей трипвайеров. Цены указаны как предварительные гипотезы для тестирования, а не как подтверждённые рыночные тарифы.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">№</th>
+                        <th style="width: 30%;">Название</th>
+                        <th style="width: 35%;">Ценность и результат для клиента</th>
+                        <th style="width: 30%;">Почему ведёт к основному продукту</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td><strong>Экспресс-аудит IT за 60 минут</strong></td>
+                        <td>Первичная проверка согласованного перечня IT-компонентов, выявление очевидных проблем и список приоритетных действий.</td>
+                        <td>Клиент видит реальные задачи, которые можно решить в рамках комплексного обслуживания.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td><strong>Разбор IT-рисков компании</strong></td>
+                        <td>Анализ ответов на опросник, оценка рисков по категориям и план дальнейшей проверки.</td>
+                        <td>Для проверки серьёзных рисков может понадобиться полноценный аудит и последующее сопровождение.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td><strong>Диагностика медленного компьютера</strong></td>
+                        <td>Удалённая сессия с проверкой производительности одного компьютера и рекомендациями.</td>
+                        <td>Если причина связана с общей инфраструктурой или повторяющимися проблемами, логично предложить обслуживание.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td><strong>Проверка резервного копирования</strong></td>
+                        <td>Проверка согласованных настроек и журналов резервного копирования; при наличии разрешения и подходящей среды — тестовое восстановление.</td>
+                        <td>Клиент может перейти к настройке, мониторингу и регулярному контролю резервных копий.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td><strong>Настройка рабочего компьютера</strong></td>
+                        <td>Приведение одного компьютера в согласованное состояние: обновления, необходимые программы, базовые настройки и документация.</td>
+                        <td>Можно предложить стандартизированную настройку и поддержку остальных рабочих мест.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td><strong>IT-инвентаризация малого офиса</strong></td>
+                        <td>Список компьютеров, периферии, сетевых устройств и доступной информации об их состоянии.</td>
+                        <td>Результат становится основой для регулярного учёта, планирования обновлений и обслуживания оборудования.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td><strong>Разбор одного сложного IT-инцидента</strong></td>
+                        <td>Анализ одной проблемы, последовательность диагностических действий и план устранения в пределах согласованного объёма.</td>
+                        <td>При повторяющихся инцидентах клиенту может быть выгоднее организовать постоянную поддержку.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td><strong>Проверка офисной сети</strong></td>
+                        <td>Проверка согласованного участка сети, подключения и доступности ключевых ресурсов; краткий отчёт о найденных проблемах.</td>
+                        <td>Выявленные задачи могут потребовать настройки сети, мониторинга и дальнейшего сопровождения.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td><strong>IT-план на ближайшие 90 дней</strong></td>
+                        <td>Персональный список приоритетов: обновление оборудования, обслуживание, безопасность и резервное копирование.</td>
+                        <td>Клиент может передать реализацию плана специалисту вместо самостоятельной координации работ.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td><strong>Настройка системы IT-заявок</strong></td>
+                        <td>Простой процесс регистрации, классификации и отслеживания обращений с помощью подходящего инструмента.</td>
+                        <td>После запуска потребуется поддерживать процесс, анализировать обращения и улучшать сервис.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td><strong>Мини-аудит IT-безопасности</strong></td>
+                        <td>Проверка согласованного набора базовых мер безопасности и отчёт с приоритетами исправления.</td>
+                        <td>Следующий шаг — устранение выявленных пробелов и плановые проверки безопасности.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12</strong></td>
+                        <td><strong>План восстановления после IT-сбоя</strong></td>
+                        <td>Документ с ответственными, последовательностью действий, контактами и приоритетами восстановления.</td>
+                        <td>Для практической готовности потребуется поддерживать документацию и регулярно проверять восстановление.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>13</strong></td>
+                        <td><strong>Комплект IT-документации для малого бизнеса</strong></td>
+                        <td>Шаблоны учёта устройств, сетевых подключений, лицензий, ответственных и технических процедур.</td>
+                        <td>Можно предложить заполнить документы по фактической инфраструктуре и поддерживать их актуальность.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>14</strong></td>
+                        <td><strong>Аудит повторяющихся неисправностей</strong></td>
+                        <td>Анализ истории нескольких инцидентов и выявление возможных общих причин, если клиент предоставляет достаточно данных.</td>
+                        <td>Подводит к постоянному анализу инцидентов и улучшению процессов IT-поддержки.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15</strong></td>
+                        <td><strong>Настройка безопасного удалённого доступа</strong></td>
+                        <td>Настройка согласованного решения для удалённой работы с учётом учётных записей, MFA и необходимых ограничений.</td>
+                        <td>Возникает потребность в поддержке пользователей, управлении доступами и регулярных проверках.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>16</strong></td>
+                        <td><strong>IT-консультация перед покупкой оборудования</strong></td>
+                        <td>Помощь в выборе компьютеров или периферии под реальные рабочие задачи и бюджет компании.</td>
+                        <td>Можно предложить настройку устройств, перенос данных и дальнейшее обслуживание.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>17</strong></td>
+                        <td><strong>Стандартизация рабочих мест</strong></td>
+                        <td>Подготовка единого набора настроек и списка программ для нескольких рабочих мест в согласованном объёме.</td>
+                        <td>Логичный следующий этап — поддерживать единый стандарт и подключать новые устройства по той же процедуре.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>18</strong></td>
+                        <td><strong>Настройка базового мониторинга IT</strong></td>
+                        <td>Настройка наблюдения за согласованными системами и уведомлений о выбранных событиях, если инфраструктура поддерживает это решение.</td>
+                        <td>Клиенту может понадобиться регулярный контроль оповещений, анализ событий и обслуживание системы мониторинга.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>19</strong></td>
+                        <td><strong>Автоматизация одной повторяющейся IT-задачи</strong></td>
+                        <td>Скрипт или небольшой автоматизированный процесс с документацией, проверкой работы и согласованными ограничениями.</td>
+                        <td>Можно масштабировать решение на другие процессы и предложить регулярное развитие автоматизации.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>20</strong></td>
+                        <td><strong>Пилотный пакет IT-поддержки на 14 дней</strong></td>
+                        <td>Ограниченный по времени и объёму тест поддержки с заранее согласованными задачами, каналом обращений и правилами работы.</td>
+                        <td>Клиент проверяет формат взаимодействия перед переходом на ежемесячное обслуживание.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Какие три продукта протестировать первыми -->
+        <div class="section-block">
+            <h2 id="tripwires-priority">🎯 Какие три продукта я бы протестировал первыми</h2>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥇 Первый выбор</span>
+                <h4>1. Экспресс-аудит IT</h4>
+                <p>Лучше всего соединяет твои технические компетенции с системным подходом. У клиента остаётся конкретный результат — список проблем и приоритетов, а у тебя появляется возможность предложить их устранение.</p>
+            </div>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥈 Второй выбор</span>
+                <h4>2. IT-инвентаризация малого офиса</h4>
+                <p>Хорошо подчёркивает не только инженерные навыки, но и способность упорядочивать IT-процессы. Особенно подходит компаниям, у которых техника и документация учитываются бессистемно.</p>
+            </div>
+
+            <div class="lead-magnet-card" style="border-left-color: #f39c12;">
+                <span class="priority-badge">🥉 Третий выбор</span>
+                <h4>3. Пилотный пакет IT-поддержки на 14 дней</h4>
+                <p>Позволяет клиенту оценить качество коммуникации, диагностики и выполнения работ на ограниченном объёме до заключения договора на регулярное обслуживание.</p>
+            </div>
+        </div>
+
+        <!-- Как встроить в воронку -->
+        <div class="section-block">
+            <h2 id="tripwires-funnel">🔄 Как встроить их в твою воронку</h2>
+            
+            <div class="tripwire-funnel">
+                <div class="tripwire-funnel-step">
+                    <strong>Бесплатный лид-магнит</strong>
+                    <span>Чек-лист или тест оценки IT-рисков</span>
+                </div>
+                <div class="tripwire-funnel-arrow">↓</div>
+                <div class="tripwire-funnel-step">
+                    <strong>Трипвайер</strong>
+                    <span>Экспресс-аудит, инвентаризация или разбор инцидента</span>
+                </div>
+                <div class="tripwire-funnel-arrow">↓</div>
+                <div class="tripwire-funnel-step">
+                    <strong>Основной продукт</strong>
+                    <span>Регулярная IT-поддержка и техническое сопровождение бизнеса</span>
+                </div>
+                <div class="tripwire-funnel-arrow">↓</div>
+                <div class="tripwire-funnel-step">
+                    <strong>Апселл</strong>
+                    <span>Мониторинг, резервное копирование, автоматизация и управление IT-процессами</span>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%); border-left-color: #f39c12;">
+                <strong>Важный стратегический момент:</strong> Не нужно запускать сразу все 20 продуктов. Выбери один сегмент клиентов и протестируй два предложения: например, экспресс-аудит для компаний, у которых уже есть проблемы, и IT-инвентаризацию для компаний, которым нужна организация инфраструктуры.
+            </div>
+
+            <p>Сравнивай не только число продаж, но и то, сколько клиентов после трипвайера готовы заказать основную услугу. Именно этот показатель покажет, какой продукт действительно работает как ступень к долгосрочному сотрудничеству.</p>
+        </div>
+
+        <!-- Готовый гайд -->
+        <div class="section-block">
+            <h2 id="guide">📖 Готовый электронный гайд: «15 признаков, что IT-инфраструктура вашего бизнеса нуждается в проверке»</h2>
+            
+            <div class="highlight-box">
+                <strong>Назначение:</strong> Бесплатный лид-магнит для владельцев малого и среднего бизнеса, руководителей офисов и ответственных за IT, которые сталкиваются с компьютерными сбоями, медленной работой техники, проблемами с сетью и риском потери данных.
+            </div>
+
+            <p>Ниже — готовый текст гайда объёмом примерно на 3 страницы, который можно оформить в PDF.</p>
+
+            <!-- СТРАНИЦА 1 -->
+            <div class="guide-page">
+                <h3>📘 СТРАНИЦА 1. Как распознать проблемы до того, как они станут серьёзными</h3>
+                
+                <h4>Почему состояние IT важно для бизнеса</h4>
+                <p>Компьютеры, интернет, серверы, принтеры и рабочие программы — основа повседневной работы многих компаний. Когда всё функционирует нормально, об IT редко задумываются. Но даже небольшой сбой может задержать выполнение заказов, остановить работу сотрудников или сделать недоступными важные документы.</p>
+                
+                <p>Проблема часто заключается не в одном неисправном устройстве, а в отсутствии регулярной проверки, учёта оборудования и понятного порядка действий при сбоях.</p>
+                
+                <p><strong>Проверьте, встречаются ли в вашей компании следующие признаки.</strong></p>
+
+                <h4>15 сигналов, на которые стоит обратить внимание</h4>
+                
+                <h4>Компьютеры и программное обеспечение</h4>
+                <ol class="sign-list">
+                    <li>Компьютеры регулярно работают медленно, зависают или неожиданно перезагружаются.</li>
+                    <li>Проблемы возвращаются после временного устранения.</li>
+                    <li>Обновления операционных систем и программ устанавливаются нерегулярно.</li>
+                    <li>На рабочих компьютерах заканчивается свободное место или появляются повторяющиеся ошибки.</li>
+                    <li>Сотрудники используют разные версии программ и самостоятельно меняют настройки.</li>
+                </ol>
+
+                <h4>Сеть и доступ к ресурсам</h4>
+                <ol class="sign-list" start="6">
+                    <li>Интернет периодически пропадает или заметно замедляется.</li>
+                    <li>Общие папки, принтеры или сетевые приложения иногда становятся недоступными.</li>
+                    <li>Никто точно не знает, какое сетевое оборудование используется и кто отвечает за его обслуживание.</li>
+                    <li>При возникновении проблемы сотрудники не понимают, кому и как сообщить о ней.</li>
+                </ol>
+
+                <h4>Данные и безопасность</h4>
+                <ol class="sign-list" start="10">
+                    <li>Резервные копии не создаются автоматически или никто не проверяет результаты их создания.</li>
+                    <li>Компания не проверяла, можно ли восстановить данные из резервной копии.</li>
+                    <li>У сотрудников могут быть избыточные права доступа к документам и системам.</li>
+                    <li>Пароли и доступы передаются без установленного порядка, а старые учётные записи могут оставаться активными.</li>
+                </ol>
+
+                <h4>Управление и обслуживание</h4>
+                <ol class="sign-list" start="14">
+                    <li>Нет актуального списка компьютеров, серверов, лицензий и ответственных лиц.</li>
+                    <li>IT-проблемы решаются только после возникновения сбоя, а плановое обслуживание практически отсутствует.</li>
+                </ol>
+
+                <div class="result-box">
+                    <strong>Как интерпретировать результат:</strong><br>
+                    • <strong>0–2 признака:</strong> поводов для немедленной тревоги может быть немного, но базовые меры обслуживания всё равно стоит проверять регулярно.<br>
+                    • <strong>3–5 признаков:</strong> составьте список проблем и определите, какие из них мешают работе чаще всего.<br>
+                    • <strong>6 и более признаков:</strong> полезно провести системную оценку IT-среды и определить приоритеты устранения проблем.
+                </div>
+
+                <div class="warning-box">
+                    <strong>Важно:</strong> Это ориентировочная самопроверка, а не профессиональная диагностика. Даже один признак — например, отсутствие проверяемых резервных копий важных данных — может потребовать срочного внимания.
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА 2 -->
+            <div class="guide-page">
+                <h3>📘 СТРАНИЦА 2. Что можно сделать самостоятельно</h3>
+                
+                <p>Не каждая IT-проблема требует немедленного привлечения специалиста. Начать можно с нескольких безопасных действий.</p>
+
+                <div class="advice-box">
+                    <h4>Совет 1. Зафиксируйте повторяющиеся сбои</h4>
+                    <p>Не ограничивайтесь формулировкой «компьютер опять завис». Записывайте:</p>
+                    <ul>
+                        <li>какое устройство или приложение работает неправильно;</li>
+                        <li>когда возникла проблема;</li>
+                        <li>что пользователь делал перед сбоем;</li>
+                        <li>появляется ли сообщение об ошибке;</li>
+                        <li>сколько сотрудников затронуто.</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Пример:</strong>
+                        <p>В офисе несколько раз в неделю пропадает доступ к общей папке. Сотрудники каждый раз перезагружают компьютеры, но проблема возвращается.</p>
+                        <p>После фиксации времени и обстоятельств выясняется, что сбой затрагивает сразу несколько сотрудников и происходит примерно в один период. Эта информация помогает специалисту проверить общие сетевые ресурсы, сервер и сетевое оборудование, вместо того чтобы тратить время на отдельную проверку каждого компьютера.</p>
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Результат:</strong> более точная диагностика и меньше повторных попыток устранить проблему наугад.
+                    </div>
+                </div>
+
+                <div class="advice-box">
+                    <h4>Совет 2. Проверьте резервное копирование</h4>
+                    <p>Наличие резервной копии ещё не означает, что данные можно восстановить.</p>
+                    
+                    <p><strong>Проверьте:</strong></p>
+                    <ul>
+                        <li>какие данные копируются;</li>
+                        <li>когда выполнялось последнее успешное копирование;</li>
+                        <li>где хранятся копии;</li>
+                        <li>кто получает уведомления об ошибках;</li>
+                        <li>проводилось ли тестовое восстановление.</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Пример:</strong>
+                        <p>Компания считает, что её документы защищены, поскольку резервное копирование настроено несколько месяцев назад. При проверке обнаруживается, что последние задания завершались с ошибкой.</p>
+                        <p>После исправления настроек специалист проводит согласованный тест восстановления нескольких файлов и документирует результат.</p>
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Результат:</strong> компания получает подтверждение того, что выбранные данные можно восстановить в рамках проверенного сценария, и понимает, какие вопросы ещё требуют внимания.
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Важно:</strong> Не проводите восстановление поверх рабочих данных без проверенной процедуры и резервной копии.
+                    </div>
+                </div>
+
+                <div class="advice-box">
+                    <h4>Совет 3. Составьте список IT-оборудования</h4>
+                    <p>Для начала достаточно простой таблицы со следующими столбцами:</p>
+                    <ul>
+                        <li>устройство и модель;</li>
+                        <li>серийный номер;</li>
+                        <li>пользователь или подразделение;</li>
+                        <li>операционная система;</li>
+                        <li>дата покупки и гарантия;</li>
+                        <li>состояние устройства;</li>
+                        <li>ответственный за обслуживание.</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Пример:</strong>
+                        <p>В компании работают 15 сотрудников, но при подготовке к обновлению компьютеров выясняется, что точного списка устройств нет. После инвентаризации становится видно, какие компьютеры используются ежедневно, какие нуждаются в проверке, а какие уже не соответствуют рабочим требованиям.</p>
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Результат:</strong> проще планировать закупки, обслуживание и замену техники, а также оценивать потребности в IT-поддержке.
+                    </div>
+                </div>
+
+                <div class="advice-box">
+                    <h4>Совет 4. Установите единый порядок обращения за помощью</h4>
+                    <p>Сотрудники не должны самостоятельно искать разные способы решения одной и той же проблемы.</p>
+                    
+                    <p><strong>Создайте простую форму заявки с полями:</strong></p>
+                    <ol>
+                        <li>Имя и подразделение.</li>
+                        <li>Устройство или программа.</li>
+                        <li>Описание проблемы.</li>
+                        <li>Время возникновения.</li>
+                        <li>Количество затронутых пользователей.</li>
+                        <li>Срочность и влияние на работу.</li>
+                    </ol>
+
+                    <div class="example-box">
+                        <strong>Пример:</strong>
+                        <p>Вместо сообщения «ничего не работает» специалист получает заявку: «Три сотрудника не могут открыть общую папку с 10:15; интернет на компьютерах работает; ошибка возникает при обращении к сетевому диску».</p>
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Результат:</strong> у специалиста больше исходной информации, а обращения проще классифицировать и отслеживать.
+                    </div>
+                </div>
+
+                <div class="advice-box">
+                    <h4>Совет 5. Назначьте приоритеты</h4>
+                    <p>Не все проблемы одинаково критичны.</p>
+                    <ul>
+                        <li><strong>Высокий приоритет:</strong> недоступность критически важной системы для всей компании, подозрение на утечку данных или потерю информации.</li>
+                        <li><strong>Средний приоритет:</strong> сбой, который мешает работе отдельного подразделения, но есть временный обходной путь.</li>
+                        <li><strong>Низкий приоритет:</strong> косметические неисправности, не влияющие существенно на рабочий процесс.</li>
+                    </ul>
+
+                    <p>Приоритеты следует адаптировать к особенностям бизнеса и заранее согласовать порядок реагирования.</p>
+
+                    <div class="warning-box">
+                        <strong>Важно:</strong> Если есть признаки киберинцидента, не удаляйте журналы событий и не выполняйте случайные действия по устранению последствий. Следуйте плану реагирования компании и обратитесь к ответственному за безопасность.
+                    </div>
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА 3 -->
+            <div class="guide-page">
+                <h3>📘 СТРАНИЦА 3. От разовых исправлений к стабильной IT-среде</h3>
+                
+                <h4>Почему самостоятельных проверок может быть недостаточно</h4>
+                <p>Чек-лист помогает заметить потенциальные проблемы, но не всегда показывает их первопричину.</p>
+                
+                <p>Например, медленная работа компьютеров может быть связана с недостатком ресурсов, программными конфликтами, проблемами сети или работой общей системы. Симптомы могут выглядеть одинаково, а решения будут разными.</p>
+                
+                <p><strong>Поэтому полезно разделять три задачи:</strong></p>
+                <ol>
+                    <li><strong>Диагностика.</strong> Понять, что происходит и какие системы затронуты.</li>
+                    <li><strong>Устранение.</strong> Исправить конкретную проблему с учётом рисков и возможного влияния на работу компании.</li>
+                    <li><strong>Профилактика.</strong> Определить, какие проверки, процессы и меры обслуживания помогут снизить вероятность повторения аналогичной проблемы.</li>
+                </ol>
+
+                <h4>Пример комплексного подхода</h4>
+                <p>Представим небольшой офис, в котором сотрудники периодически теряют доступ к рабочим документам.</p>
+                
+                <p>Сначала сотрудники фиксируют время сбоев и перечень затронутых устройств. Затем специалист проверяет доступность сетевых ресурсов, состояние соответствующего оборудования и журналы событий. После определения причины выполняются согласованные исправления.</p>
+                
+                <p>Далее компания получает рекомендации по документированию инфраструктуры, контролю резервного копирования и порядку регистрации инцидентов.</p>
+
+                <div class="result-box">
+                    <strong>Главная мысль:</strong> важно не только восстановить работу, но и понять, какие меры помогут избежать повторения проблемы.
+                </div>
+
+                <h4>Мини-план проверки IT на ближайшие 7 дней</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">День</th>
+                            <th style="width: 45%;">Действие</th>
+                            <th style="width: 45%;">Результат</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Соберите повторяющиеся жалобы сотрудников</td>
+                            <td>Список наиболее частых проблем</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Составьте перечень компьютеров и оборудования</td>
+                            <td>Начальная инвентаризация</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Проверьте обновления и состояние рабочих устройств</td>
+                            <td>Список устройств, требующих внимания</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Изучите состояние резервного копирования</td>
+                            <td>Понимание того, что копируется и проверяется</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>Проверьте порядок предоставления и отзыва доступов</td>
+                            <td>Список вопросов по безопасности</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>Определите приоритеты IT-проблем</td>
+                            <td>Перечень первоочередных задач</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>Составьте план дальнейших действий</td>
+                            <td>Понимание, что можно сделать самостоятельно, а где нужна помощь</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>Важно:</strong> Не изменяйте критически важные настройки и не проводите рискованные проверки без необходимых полномочий и понимания возможных последствий.
+                </div>
+
+                <h4>Хотите понять, в каком состоянии IT вашей компании?</h4>
+                <p>Я помогаю разбираться в технических проблемах, оценивать состояние IT-среды и выстраивать системный подход к обслуживанию.</p>
+                
+                <p>В зависимости от потребностей компании можно начать с первичной консультации или согласованного экспресс-аудита, чтобы:</p>
+                <ul>
+                    <li>определить наиболее важные проблемы;</li>
+                    <li>сформировать перечень приоритетных действий;</li>
+                    <li>понять, какие вопросы требуют углублённой диагностики;</li>
+                    <li>оценить необходимость регулярной IT-поддержки.</li>
+                </ul>
+
+                <div class="idea-box">
+                    <strong>Следующий шаг:</strong> подготовьте результаты самостоятельной проверки и обсудите их со специалистом.
+                </div>
+
+                <p><em>Системный подход к IT начинается не с покупки нового оборудования, а с понимания того, что уже есть, как это работает и какие риски действительно важны для бизнеса.</em></p>
+
+                <div class="highlight-box">
+                    <strong>Примечание:</strong> Материал предназначен для предварительной самооценки. Он не заменяет полноценный технический аудит, проверку безопасности или профессиональную диагностику конкретной инфраструктуры.
+                </div>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left-color: #2980b9;">
+                <h4>Как использовать этот гайд в воронке продаж</h4>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>Название PDF:</strong> «15 признаков, что IT-инфраструктура вашего бизнеса нуждается в проверке».</li>
+                    <li><strong>Целевая аудитория:</strong> владельцы небольших компаний, офис-менеджеры и руководители, отвечающие за работоспособность IT.</li>
+                    <li><strong>Призыв к действию:</strong> предложить читателю заказать экспресс-аудит IT по согласованному объёму работ.</li>
+                    <li><strong>Следующий платный продукт:</strong> аудит с письменным отчётом, приоритетами и рекомендациями.</li>
+                    <li><strong>Основной продукт:</strong> регулярное обслуживание и IT-поддержка компании.</li>
+                </ul>
+                <p><em>Примеры в гайде намеренно обозначены как иллюстративные, чтобы не выдавать вымышленные истории за реальные кейсы. Когда у тебя появятся собственные примеры выполненных работ, их можно будет добавить вместо них — это повысит доверие к твоей экспертизе.</em></p>
+            </div>
+        </div>
+
+        <!-- Контент-план для VK -->
+        <div class="section-block">
+            <h2 id="vk-content">📱 Контент-план для VK на 7 дней</h2>
+            
+            <p>Я бы строил контент-план для VK не как набор случайных постов про компьютеры, а как недельную стратегию, которая показывает твою экспертность, вовлекает аудиторию в обсуждение реальных IT-проблем и постепенно подводит к покупке IT-аудита или регулярного обслуживания.</p>
+
+            <div class="highlight-box">
+                <strong>Твоё ключевое позиционирование:</strong> техническая экспертиза + управление IT-сервисом. Поэтому контент должен показывать не только, как устранять неисправности, но и как предотвращать повторные сбои, организовывать поддержку и помогать бизнесу не терять время из-за проблем с IT.
+            </div>
+
+            <p>План рассчитан на владельцев малого бизнеса, руководителей офисов и компаний, где IT-задачи часто решаются по мере возникновения проблем. Это стартовая гипотеза целевой аудитории — эффективность тем нужно будет проверить по статистике VK.</p>
+
+            <h3>🎯 Стратегическая цель недели</h3>
+            <div class="idea-box">
+                Сформировать доверие → показать скрытые проблемы → вовлечь в диалог → получить заявки на IT-аудит.
+            </div>
+
+            <h3>👥 Основная аудитория</h3>
+            <p>Владельцы малого бизнеса, руководители офисов, ответственные за IT и компании без полноценного внутреннего IT-отдела.</p>
+
+            <h3>🎨 Тон коммуникации</h3>
+            <p>Спокойный технический эксперт, который объясняет сложное простым языком, не запугивает и не навязывает услуги.</p>
+
+            <h3> План публикаций</h3>
+            <p>Рекомендуемый стартовый график — 1 основная публикация в день с дополнительными историями VK в дни, когда нужно поддержать обсуждение. Время публикации следует проверить экспериментально по активности своей аудитории.</p>
+
+            <!-- Понедельник -->
+            <div class="vk-day-card informational">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Понедельник</span>
+                    <span class="vk-content-type informational">Информационный</span>
+                </div>
+                
+                <div class="vk-topic">«Компьютер работает. Почему бизнес всё равно теряет деньги?»</div>
+                
+                <span class="vk-format">Формат: экспертный пост с коротким разбором ситуации</span>
+
+                <div class="vk-section">
+                    <strong>Идея:</strong>
+                    <p>Показать три незаметных источника потерь: сотрудники ждут восстановления доступа к файлам, повторно сталкиваются с одними и теми же сбоями, а техника обслуживается только после поломки.</p>
+                </div>
+
+                <div class="vk-section">
+                    <strong>Нестандартный ход:</strong>
+                    <p>Рассчитать условную стоимость одного часа простоя. Например, если пять сотрудников с условной стоимостью рабочего часа €20 каждый не могут работать в течение часа, прямые затраты рабочего времени составят €100. Это иллюстрация, не универсальная оценка потерь бизнеса.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Какая IT-проблема чаще всего отнимает время у вашей команды?»
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> показать, что ты понимаешь бизнес-последствия технических сбоев.
+                </div>
+            </div>
+
+            <!-- Вторник -->
+            <div class="vk-day-card engaging">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Вторник</span>
+                    <span class="vk-content-type engaging">Вовлекающий</span>
+                </div>
+                
+                <div class="vk-topic">«Интернет пропал во всём офисе. Ваши первые действия?»</div>
+                
+                <span class="vk-format">Формат: опрос VK с четырьмя вариантами ответа</span>
+
+                <div class="vk-section">
+                    <strong>Варианты опроса:</strong>
+                    <ul>
+                        <li>Перезагрузить роутер.</li>
+                        <li>Проверить, у всех ли пропал интернет.</li>
+                        <li>Сразу вызвать специалиста.</li>
+                        <li>Начать менять настройки оборудования.</li>
+                    </ul>
+                    <p>На следующий день или в комментарии объясни логику диагностики: сначала определить масштаб проблемы, проверить доступность сервисов и только потом выбирать действия.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Напишите, какой вариант выбрали и почему».
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> получить комментарии, выявить уровень технической подготовки аудитории и показать метод мышления.
+                </div>
+            </div>
+
+            <!-- Среда -->
+            <div class="vk-day-card entertaining">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Среда</span>
+                    <span class="vk-content-type entertaining">Развлекательный</span>
+                </div>
+                
+                <div class="vk-topic">«IT-авария по-офисному: 5 фраз, после которых инженеру нужна дополнительная информация»</div>
+                
+                <span class="vk-format">Формат: мем-карусель или серия карточек</span>
+
+                <div class="vk-section">
+                    <strong>Примеры фраз:</strong>
+                    <ul>
+                        <li>«Я ничего не нажимал».</li>
+                        <li>«Вчера всё работало».</li>
+                        <li>«Интернет не работает» — но только на одном сайте.</li>
+                        <li>«Я просто немного поменял настройки».</li>
+                        <li>«Ошибка исчезла, когда я позвал вас».</li>
+                    </ul>
+                    <p>В финале — полезный вывод: точное описание симптомов помогает быстрее найти причину.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Какая фраза чаще всего звучит у вас на работе? Добавьте свою в комментариях».
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> сделать экспертный образ живым и получить органические реакции без прямой продажи.
+                </div>
+            </div>
+
+            <!-- Четверг -->
+            <div class="vk-day-card informational">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Четверг</span>
+                    <span class="vk-content-type informational">Информационный</span>
+                </div>
+                
+                <div class="vk-topic">«Резервная копия есть. А данные точно можно восстановить?»</div>
+                
+                <span class="vk-format">Формат: мини-гайд из 5 карточек</span>
+
+                <div class="vk-section">
+                    <strong>Структура:</strong>
+                    <ol>
+                        <li>Почему отметка «копирование выполнено» не гарантирует восстановление.</li>
+                        <li>Какие данные действительно необходимо защищать.</li>
+                        <li>Как проверить дату последней успешной копии.</li>
+                        <li>Почему нужно тестовое восстановление.</li>
+                        <li>Какие действия стоит поручить специалисту.</li>
+                    </ol>
+                </div>
+
+                <div class="vk-section">
+                    <strong>Нестандартный ход:</strong>
+                    <p>Начать с вопроса «Если сейчас исчезнет папка с клиентскими документами, знаете ли вы, сколько времени займёт восстановление?»</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Напишите "КОПИЯ" в комментариях — пришлю чек-лист самостоятельной проверки».
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> создать практическую ценность и получить потенциальных клиентов, заинтересованных в проверке IT.
+                </div>
+            </div>
+
+            <!-- Пятница -->
+            <div class="vk-day-card selling">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Пятница</span>
+                    <span class="vk-content-type selling">Продающий</span>
+                </div>
+                
+                <div class="vk-topic">«Не ждите серьёзного сбоя: что даёт экспресс-аудит IT»</div>
+                
+                <span class="vk-format">Формат: продающий пост с конкретным перечнем результата</span>
+
+                <div class="vk-section">
+                    <strong>Вместо абстрактного обещания «улучшить IT» опиши, что получает клиент:</strong>
+                    <ul>
+                        <li>проверку заранее согласованного перечня систем;</li>
+                        <li>список обнаруженных проблем и потенциальных рисков;</li>
+                        <li>распределение задач по приоритетам;</li>
+                        <li>рекомендации по дальнейшим действиям;</li>
+                        <li>понимание, что можно исправить самостоятельно, а где нужна помощь.</li>
+                    </ul>
+                    <p>Предложение: платный экспресс-аудит с фиксированным объёмом работ и заранее согласованной стоимостью.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Напишите "АУДИТ" в личные сообщения сообщества, чтобы обсудить задачи и объём проверки».
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> перевести заинтересованных подписчиков в диалог о покупке. Не обещай гарантированного обнаружения всех проблем.
+                </div>
+            </div>
+
+            <!-- Суббота -->
+            <div class="vk-day-card entertaining">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Суббота</span>
+                    <span class="vk-content-type mixed">Развлекательный + экспертный</span>
+                </div>
+                
+                <div class="vk-topic">«Угадай неисправность: симптом есть, причина неочевидна»</div>
+                
+                <span class="vk-format">Формат: мини-кейс с интерактивным выбором ответа</span>
+
+                <div class="vk-section">
+                    <strong>Сценарий:</strong>
+                    <p>Компьютер включается, но сотрудник не может открыть общую папку. При этом интернет работает, а другие программы запускаются.</p>
+                </div>
+
+                <div class="vk-section">
+                    <strong>Предложи выбрать возможную причину:</strong>
+                    <ul>
+                        <li>неисправность самого компьютера;</li>
+                        <li>проблема с сетевым ресурсом или доступом;</li>
+                        <li>сбой интернет-подключения;</li>
+                        <li>недостаточно информации для вывода.</li>
+                    </ul>
+                    <p>Правильный экспертный подход — не угадывать, а последовательно проверять гипотезы.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Какую проверку вы сделали бы первой?»
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> продемонстрировать диагностическое мышление и собрать содержательные комментарии.
+                </div>
+            </div>
+
+            <!-- Воскресенье -->
+            <div class="vk-day-card engaging">
+                <div class="vk-day-header">
+                    <span class="vk-day-name">📅 Воскресенье</span>
+                    <span class="vk-content-type mixed">Вовлекающий + мягко продающий</span>
+                </div>
+                
+                <div class="vk-topic">«Если бы можно было решить одну IT-проблему в вашей компании — какую?»</div>
+                
+                <span class="vk-format">Формат: открытый вопрос + короткая история о системном подходе</span>
+
+                <div class="vk-section">
+                    <strong>Предложи аудитории выбрать, что беспокоит больше всего:</strong>
+                    <ul>
+                        <li>постоянные сбои компьютеров;</li>
+                        <li>нестабильная сеть;</li>
+                        <li>риск потери данных;</li>
+                        <li>отсутствие порядка в обслуживании;</li>
+                        <li>непредсказуемые расходы на IT.</li>
+                    </ul>
+                    <p>После обсуждения покажи, что решение зависит от причины и масштаба проблемы, а не от универсального списка советов.</p>
+                </div>
+
+                <div class="vk-call-to-action">
+                    <strong>Призыв:</strong> «Опишите проблему в комментариях или личных сообщениях. Подскажу, с какой проверки разумно начать».
+                </div>
+
+                <div class="vk-goal">
+                    <strong>Цель:</strong> собрать реальные формулировки болей аудитории и получить темы для будущих публикаций и консультаций.
+                </div>
+            </div>
+
+            <!-- Распределение контента -->
+            <h3>📊 Как распределяется контент</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Тип контента</th>
+                        <th style="width: 70%;">Дни недели</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Информационный</strong></td>
+                        <td>Понедельник, четверг</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Вовлекающий</strong></td>
+                        <td>Вторник, воскресенье</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Развлекательный</strong></td>
+                        <td>Среда, суббота</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Продающий</strong></td>
+                        <td>Пятница</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><em>Проценты показывают долю публикаций за неделю, а не прогноз охватов или продаж.</em></p>
+
+            <div class="idea-box">
+                Такой баланс нужен, чтобы сообщество не выглядело рекламной лентой. При этом продажа не ограничивается пятницей: другие публикации формируют интерес к аудиту и демонстрируют экспертность.
+            </div>
+
+            <!-- Дополнительная механика: истории VK -->
+            <h3>📸 Дополнительная механика: истории VK</h3>
+            <p>В дни публикаций можно добавлять одну короткую историю, связанную с основной темой.</p>
+
+            <ul class="vk-ideas-list">
+                <li><strong>Понедельник:</strong> опрос «Что чаще всего тормозит работу офиса?»</li>
+                <li><strong>Вторник:</strong> результаты опроса о пропавшем интернете.</li>
+                <li><strong>Среда:</strong> мем про фразу «Я ничего не нажимал».</li>
+                <li><strong>Четверг:</strong> напоминание проверить резервное копирование.</li>
+                <li><strong>Пятница:</strong> описание состава экспресс-аудита.</li>
+                <li><strong>Суббота:</strong> голосование по мини-кейсу.</li>
+                <li><strong>Воскресенье:</strong> вопрос о главной IT-проблеме подписчиков.</li>
+            </ul>
+
+            <!-- Как оценивать результат недели -->
+            <h3>📈 Как оценивать результат недели</h3>
+            <p>Не ориентируйся только на лайки. Для этой воронки важнее понять, привлекает ли контент потенциальных клиентов и переходит ли их интерес в реальные обращения.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Показатель</th>
+                        <th style="width: 60%;">Что он показывает</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Охват и просмотры</strong></td>
+                        <td>Какие темы замечают пользователи</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Сохранения и репосты</strong></td>
+                        <td>Насколько материал полезен и достоин распространения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Содержательные комментарии</strong></td>
+                        <td>Насколько тема связана с реальными проблемами аудитории</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Переходы в сообщения</strong></td>
+                        <td>Возникает ли интерес к решению проблемы</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Квалифицированные обращения</strong></td>
+                        <td>Есть ли потенциальные клиенты, которым действительно нужна твоя услуга</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Заявки на аудит</strong></td>
+                        <td>Приводит ли контент к целевому действию</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                После недели сравни результаты по темам и форматам. Сохрани наиболее эффективные идеи, а слабые не обязательно удалять — попробуй другой заголовок, формат или призыв к действию.
+            </div>
+
+            <!-- Три правила для личного бренда -->
+            <h3>✨ Три правила, которые усилят личный бренд</h3>
+
+            <ol class="rules-list">
+                <li>
+                    <strong>1. Показывай ход диагностики.</strong>
+                    Не только рассказывай, что сломалось, но и объясняй, как отличить симптом от причины.
+                </li>
+                <li>
+                    <strong>2. Превращай опыт в доказательства.</strong>
+                    Используй реальные случаи из своей практики, скрывая персональные данные и конфиденциальную информацию. Не выдавай учебные сценарии за истории клиентов.
+                </li>
+                <li>
+                    <strong>3. Продавай понятный результат.</strong>
+                    Вместо «оказываю IT-услуги» объясняй, что клиент получит: перечень проблем, приоритеты, рекомендации или согласованный план обслуживания.
+                </li>
+            </ol>
+
+            <div class="idea-box">
+                <strong>Главная идея контента:</strong> «Я помогаю не просто устранять IT-сбои, а понимать их причины и организовывать решение так, чтобы бизнес мог работать стабильнее».
+            </div>
+
+            <p>Это связывает инженерный опыт с управленческой компетенцией и делает публикации частью единой стратегии продаж, а не набором несвязанных советов.</p>
+        </div>
+
+        <!-- Триггерные заголовки -->
+        <div class="section-block">
+            <h2 id="headlines">🎣 10 триггерных заголовков для привлечения аудитории</h2>
+            
+            <p>Вот 10 триггерных заголовков для аудитории, которой важно поддерживать стабильность IT-инфраструктуры и снижать риск повторных сбоев. Сделан акцент на потерях времени, повторяющихся неисправностях, рисках для бизнеса и отсутствии системного контроля.</p>
+
+            <div class="headline-card">
+                <div class="headline-number">1</div>
+                <div class="headline-text">«Сбой за сбоем: почему ваши IT-проблемы возвращаются снова и снова?»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">2</div>
+                <div class="headline-text">«Сегодня завис компьютер, завтра встанет весь офис? 5 сигналов, которые нельзя игнорировать»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">3</div>
+                <div class="headline-text">«Чините одну и ту же проблему каждый месяц? Возможно, вы устраняете симптомы, а не причину»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">4</div>
+                <div class="headline-text">«IT работает до первого сбоя? Как понять, насколько надёжна ваша инфраструктура»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">5</div>
+                <div class="headline-text">«Сколько рабочих часов съедают повторные IT-сбои — и можно ли это остановить?»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">6</div>
+                <div class="headline-text">«Интернет пропадает, компьютеры тормозят, сотрудники ждут: кто контролирует стабильность вашего IT?»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">7</div>
+                <div class="headline-text">«Один сбой — случайность. Повторяющиеся сбои — повод проверить систему»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">8</div>
+                <div class="headline-text">«Пока всё работает, проблемы незаметны. Что может скрываться в вашей IT-инфраструктуре?»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">9</div>
+                <div class="headline-text">«Перезагрузка снова помогла? Почему временное решение может дорого обойтись бизнесу»</div>
+            </div>
+
+            <div class="headline-card">
+                <div class="headline-number">10</div>
+                <div class="headline-text">«Хватит тушить IT-пожары: как перейти от срочного ремонта к профилактике сбоев»</div>
+            </div>
+
+            <h3 class="sub-section-title">🎯 Какие заголовки использовать в первую очередь</h3>
+
+            <div class="headline-category attention">
+                <h4>🔥 Для привлечения внимания</h4>
+                <span class="headline-category-numbers">№ 2 и № 6</span>
+                <p>Показывают знакомые ситуации и их последствия.</p>
+            </div>
+
+            <div class="headline-category expertise">
+                <h4>🎓 Для демонстрации экспертности</h4>
+                <span class="headline-category-numbers">№ 1 и № 3</span>
+                <p>Подчёркивают системный подход и поиск первопричин.</p>
+            </div>
+
+            <div class="headline-category sale">
+                <h4>💼 Для продажи экспресс-аудита IT</h4>
+                <span class="headline-category-numbers">№ 8 и № 10</span>
+                <p>Подводят к проверке инфраструктуры и профилактике.</p>
+            </div>
+
+            <div class="recommendation-box">
+                <h4>💡 Рекомендация</h4>
+                <p>Начать с заголовка <span class="rec-number">3</span> <strong>«Чините одну и ту же проблему каждый месяц? Возможно, вы устраняете симптомы, а не причину»</strong>.</p>
+                <p>Он напрямую затрагивает боль целевой аудитории и подчёркивает ваше позиционирование: не просто ремонтировать, а находить причины повторных сбоев.</p>
+            </div>
+
+            <!-- Заголовки со словом "Как" -->
+            <h3 class="sub-section-title">❓ 10 заголовков, начинающихся со слова «Как»</h3>
+            
+            <p>Вот 10 триггерных заголовков, начинающихся со слова «Как», для аудитории, которая хочет поддерживать стабильность IT-инфраструктуры и снизить риск повторных сбоев.</p>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">1</div>
+                <div class="how-headline-text"><strong>Как</strong> сократить количество повторных IT-сбоев и перестать постоянно чинить одно и то же?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">2</div>
+                <div class="how-headline-text"><strong>Как</strong> выявить скрытые проблемы IT-инфраструктуры до того, как они остановят работу офиса?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">3</div>
+                <div class="how-headline-text"><strong>Как</strong> перестать тушить IT-пожары и перейти к системной профилактике неисправностей?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">4</div>
+                <div class="how-headline-text"><strong>Как</strong> понять, почему IT-сбои повторяются, даже если оборудование уже ремонтировали?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">5</div>
+                <div class="how-headline-text"><strong>Как</strong> снизить риск потери данных и простоев из-за внезапных IT-проблем?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">6</div>
+                <div class="how-headline-text"><strong>Как</strong> обеспечить стабильную работу компьютеров и сети без постоянных экстренных вызовов специалиста?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">7</div>
+                <div class="how-headline-text"><strong>Как</strong> проверить надёжность IT-инфраструктуры, пока всё ещё работает нормально?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">8</div>
+                <div class="how-headline-text"><strong>Как</strong> сократить потери рабочего времени из-за зависаний компьютеров, проблем с сетью и повторных ошибок?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">9</div>
+                <div class="how-headline-text"><strong>Как</strong> организовать IT-поддержку так, чтобы проблемы решались системно, а не возвращались через неделю?</div>
+            </div>
+
+            <div class="how-headline-card">
+                <div class="how-headline-number">10</div>
+                <div class="how-headline-text"><strong>Как</strong> выявить слабые места IT-инфраструктуры и определить, что нужно исправить в первую очередь?</div>
+            </div>
+
+            <h3 class="sub-section-title">🏆 Три самых сильных заголовка для VK</h3>
+
+            <div class="headline-category attention">
+                <h4>🔥 Для привлечения внимания</h4>
+                <span class="headline-category-numbers">№ 1</span>
+                <p>Обещает решение знакомой и раздражающей проблемы.</p>
+            </div>
+
+            <div class="headline-category expertise">
+                <h4>🎓 Для демонстрации экспертности</h4>
+                <span class="headline-category-numbers">№ 4</span>
+                <p>Подчёркивает важность поиска первопричины.</p>
+            </div>
+
+            <div class="headline-category sale">
+                <h4>💼 Для привлечения клиентов на экспресс-аудит</h4>
+                <span class="headline-category-numbers">№ 7</span>
+                <p>Создаёт повод проверить инфраструктуру до серьёзного сбоя.</p>
+            </div>
+
+            <div class="formula-box">
+                <h4>💡 Совет: формула сильного заголовка</h4>
+                <p>Для более сильного маркетингового эффекта используй формулу:</p>
+                <div class="formula">Как + желаемый результат + конкретная боль</div>
+                <p><strong>Пример:</strong> «Как сократить повторные IT-сбои и перестать тратить время на ремонт одной и той же проблемы?»</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка "Наверх" -->
+    <a href="#" class="back-to-top" id="backToTop" title="Наверх">↑</a>
+
+    <script>
+        // Показ/скрытие кнопки "Наверх"
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>
