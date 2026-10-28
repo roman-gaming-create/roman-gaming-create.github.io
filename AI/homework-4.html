@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашнее задание №4 — Презентация в Gamma</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4edf9);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        .main-title {
+            color: #1a5276;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .main-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 16px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d6eaf8;
+        }
+        .gamma-block {
+            background: linear-gradient(135deg, #f8fbff 0%, #e3f2fd 100%);
+            padding: 40px 30px;
+            border-radius: 12px;
+            border: 2px solid #d6eaf8;
+            margin-bottom: 30px;
+        }
+        .gamma-block h2 {
+            color: #1a5276;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .gamma-block p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        .gamma-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 35px;
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        }
+        .gamma-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(155, 89, 182, 0.4);
+            background: linear-gradient(135deg, #a569bd 0%, #9b59b6 100%);
+        }
+        .gamma-icon {
+            font-size: 24px;
+        }
+        .note {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* === Навигация по домашним заданиям === */
+        .nav-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #d6eaf8;
+        }
+        .nav-section h3 {
+            color: #1a5276;
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: white;
+            border: 2px solid #d6eaf8;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            border-color: #3498db;
+            background: #f8fbff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+        }
+        .nav-link .nav-emoji {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .nav-link.home {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-color: transparent;
+            justify-content: center;
+            font-weight: 600;
+        }
+        .nav-link.home:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 25px 15px; }
+            .main-title { font-size: 24px; }
+            .gamma-button { font-size: 16px; padding: 15px 25px; width: 100%; justify-content: center; }
+            .nav-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title"> Домашнее задание №4</h1>
+        <p class="main-subtitle">Курс «Нейросети и ИИ» — Интерактивная презентация</p>
+
+        <div class="gamma-block">
+            <h2>🖥️ Презентация, созданная в Gamma</h2>
+            <p>
+                Данное домашнее задание выполнено в формате интерактивной презентации,<br>
+                сгенерированной и оформленной с помощью нейросети <strong>Gamma.app</strong>.
+            </p>
+
+            <!-- ⚠️ ВАЖНО: Замените ссылку ниже на вашу реальную ссылку из Gamma -->
+            <a href="https://gamma.app/docs/15-IT--fuj07b1b3g2hp0r" target="_blank" class="gamma-button">
+                <span class="gamma-icon">🚀</span>
+                <span>Открыть презентацию</span>
+            </a>
+
+            <p class="note">Ссылка откроется в новой вкладке браузера</p>
+        </div>
+
+        <!-- Навигация по домашним заданиям -->
+        <div class="nav-section">
+            <h3>📖 Навигация по домашним заданиям</h3>
+            <div class="nav-grid">
+                <a href="../AI.html" class="nav-link home">
+                    <span class="nav-emoji">🏠</span>
+                    <span>Главная страница курса</span>
+                </a>
+                <a href="homework-1.html" class="nav-link">
+                    <span class="nav-emoji">🤖</span>
+                    <span>ДЗ №1 — Тестирование нейросетей</span>
+                </a>
+                <a href="homework-2.html" class="nav-link">
+                    <span class="nav-emoji">🚀</span>
+                    <span>ДЗ №2 — Экспертный профиль</span>
+                </a>
+                <a href="homework-3.html" class="nav-link">
+                    <span class="nav-emoji">📊</span>
+                    <span>ДЗ №3 — Воронка продаж</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
