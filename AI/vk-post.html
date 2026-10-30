@@ -231,9 +231,11 @@
             margin-bottom: 10px;
             font-size: 14px;
         }
+        
+        /* === ИСПРАВЛЕНИЕ ВЫРАВНИВАНИЯ ИКОНКИ === */
         .vk-post-content .option {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* Выравнивание по верхнему краю, а не по центру */
             gap: 8px;
             padding: 8px 0;
             font-size: 14px;
@@ -242,7 +244,12 @@
             font-size: 18px;
             width: 24px;
             text-align: center;
+            flex-shrink: 0; /* Запрещаем иконке сжиматься */
+            line-height: 1.2; /* Идеальное совпадение с первой строкой текста */
+            margin-top: 1px; /* Микро-коррекция для визуального центра относительно буквы */
         }
+        /* ========================================== */
+
         .vk-post-content .cta-block {
             background: #f5f7fa;
             padding: 14px 18px;
@@ -602,7 +609,7 @@
 
                 <p>Знакомая ситуация? Тогда, возможно, пора обновить технику!</p>
 
-                <p> <strong>Продаём технику для работы, учёбы и развлечений!</strong></p>
+                <p>🔥 <strong>Продаём технику для работы, учёбы и развлечений!</strong></p>
 
                 <p>Что бы ты ни искал — компьютер для повседневных задач, мощную машину для игр или надёжного помощника для работы — главное, чтобы техника решала задачи, а не создавала новые.</p>
 
@@ -611,7 +618,7 @@
                 <div class="question-block">
                     <strong>Что больше всего раздражает в старом компьютере?</strong>
                     <div class="option">
-                        <span class="option-emoji">️🖥️</span>
+                        <span class="option-emoji">🖥️</span>
                         <span>— Включается дольше, чем я собираюсь на работу.</span>
                     </div>
                     <div class="option">
