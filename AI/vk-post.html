@@ -285,6 +285,219 @@
             font-size: 18px;
         }
 
+        /* ===== МОДАЛЬНОЕ ОКНО СООБЩЕНИЯ VK ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .message-modal {
+            background: #ffffff;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        /* Шапка модального окна */
+        .message-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e7e8ec;
+            background: #fafbfc;
+        }
+        .message-header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0077ff 0%, #0055cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .message-header-info {
+            flex: 1;
+        }
+        .message-header-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+        }
+        .message-header-status {
+            font-size: 12px;
+            color: #4bb34b;
+        }
+        .message-header-status::before {
+            content: '● ';
+            font-size: 10px;
+        }
+        .message-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 20px;
+            color: #818c99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .message-close:hover {
+            background: #f0f2f5;
+            color: #000;
+        }
+
+        /* Тело модального окна */
+        .message-body {
+            padding: 30px 20px 20px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Большой подмигивающий смайлик */
+        .wink-emoji {
+            font-size: 80px;
+            line-height: 1;
+            margin-bottom: 15px;
+            animation: wink 2.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes wink {
+            0%, 70%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            80% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+            85% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+        }
+
+        .message-greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 6px;
+        }
+        .message-subtext {
+            font-size: 13px;
+            color: #818c99;
+            margin-bottom: 20px;
+        }
+
+        /* Поле ввода */
+        .message-input-wrapper {
+            width: 100%;
+            background: #f0f2f5;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #000;
+            outline: none;
+            min-height: 40px;
+            max-height: 120px;
+            padding: 4px 0;
+        }
+        .message-input::placeholder {
+            color: #939393;
+        }
+        .message-attach {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            color: #818c99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .message-attach:hover {
+            background: #e7e8ec;
+            color: #0077ff;
+        }
+        .message-send {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #0077ff;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .message-send:hover {
+            background: #0066dd;
+            transform: scale(1.05);
+        }
+        .message-send:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Кнопка "Назад" */
         .back-button {
             position: fixed;
@@ -322,6 +535,7 @@
                 width: 100%;
                 justify-content: center;
             }
+            .wink-emoji { font-size: 64px; }
         }
     </style>
 </head>
@@ -345,7 +559,6 @@
                 <div class="profile-name">Магазин компьютерной техники</div>
                 <div class="profile-status">Продаём технику для работы, учёбы и развлечений</div>
 
-                <!-- Статистика + кнопка заявки -->
                 <div class="profile-bottom">
                     <div class="profile-stats">
                         <div class="profile-stat">
@@ -361,10 +574,10 @@
                             <div class="profile-stat-label">видео</div>
                         </div>
                     </div>
-                    <a href="#" class="repair-btn">
+                    <button class="repair-btn" onclick="openMessageModal()">
                         <span class="btn-icon">🔧</span>
                         <span>Оставить заявку на ремонт</span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -398,7 +611,7 @@
                 <div class="question-block">
                     <strong>Что больше всего раздражает в старом компьютере?</strong>
                     <div class="option">
-                        <span class="option-emoji">🖥️</span>
+                        <span class="option-emoji">️🖥️</span>
                         <span>— Включается дольше, чем я собираюсь на работу.</span>
                     </div>
                     <div class="option">
@@ -443,7 +656,100 @@
         </div>
     </div>
 
+    <!-- Модальное окно сообщения -->
+    <div class="modal-overlay" id="messageModal" onclick="closeMessageModal(event)">
+        <div class="message-modal" onclick="event.stopPropagation()">
+            <!-- Шапка -->
+            <div class="message-header">
+                <div class="message-header-avatar">💻</div>
+                <div class="message-header-info">
+                    <div class="message-header-name">Магазин компьютерной техники</div>
+                    <div class="message-header-status">онлайн</div>
+                </div>
+                <button class="message-close" onclick="closeMessageModal()" title="Закрыть">✕</button>
+            </div>
+
+            <!-- Тело -->
+            <div class="message-body">
+                <div class="wink-emoji">😉</div>
+                <div class="message-greeting">Я вас внимательно слушаю! :)</div>
+                <div class="message-subtext">Опишите вашу проблему — мы ответим в ближайшее время</div>
+
+                <div class="message-input-wrapper">
+                    <textarea class="message-input" id="messageInput" placeholder="Напишите сообщение..." rows="1"></textarea>
+                    <button class="message-attach" title="Прикрепить файл">📎</button>
+                    <button class="message-send" id="sendBtn" onclick="sendMessage()" title="Отправить" disabled>➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Кнопка назад -->
     <a href="homework-5.html" class="back-button">← Вернуться к ДЗ №5</a>
+
+    <script>
+        // Открыть модальное окно
+        function openMessageModal() {
+            document.getElementById('messageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                document.getElementById('messageInput').focus();
+            }, 300);
+        }
+
+        // Закрыть модальное окно
+        function closeMessageModal(event) {
+            if (event && event.target !== event.currentTarget && event.type === 'click') return;
+            document.getElementById('messageModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMessageModal();
+            }
+        });
+
+        // Активация кнопки отправки при вводе текста
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        messageInput.addEventListener('input', function() {
+            // Автоувеличение высоты textarea
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            // Активация кнопки
+            sendBtn.disabled = this.value.trim() === '';
+        });
+
+        // Отправка сообщения
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            // Имитация отправки
+            sendBtn.innerHTML = '✓';
+            sendBtn.style.background = '#4bb34b';
+
+            setTimeout(() => {
+                alert('✅ Сообщение отправлено!\n\nМы ответим вам в ближайшее время.');
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                sendBtn.disabled = true;
+                sendBtn.innerHTML = '➤';
+                sendBtn.style.background = '#0077ff';
+                closeMessageModal();
+            }, 600);
+        }
+
+        // Отправка по Ctrl+Enter
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                if (!sendBtn.disabled) sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
